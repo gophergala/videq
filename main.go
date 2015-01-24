@@ -7,6 +7,8 @@ import (
 	"os"
 	"runtime"
 
+	_ "github.com/cenkalti/log"
+	"github.com/gophergala/videq/handlers/check"
 	"github.com/gophergala/videq/handlers/gzip"
 	"github.com/gophergala/videq/handlers/home"
 	"github.com/gophergala/videq/handlers/session"
@@ -76,6 +78,9 @@ func webServer(db *Database, port string) {
 
 	uploadHandler := upload.NewHandler(log, ROOT_PATH, NUM_OF_MERGE_BUFFER, NUM_OF_MERGE_WORKERS)
 	http.Handle("/upload/", uploadHandler)
+
+	checkHandler := check.NewHandler(log, ROOT_PATH)
+	http.Handle("/check/", checkHandler)
 
 	log.Infof("Server started on port %v", port)
 	log.Info(http.ListenAndServe(":"+port, nil))
