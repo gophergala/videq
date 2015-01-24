@@ -51,9 +51,28 @@ header h1 {
 footer{
   position: absolute;
   left: 5%;
-  bottom: 20px;
+  bottom: 0px;
   width: auto;
   color: #fff;
+}
+
+
+footer .gopher{
+  position: absolute;
+  bottom: -40px;
+  left: 70%;
+  width: 219px;
+  height: 144px;
+  background: url(../img/gopher.png) no-repeat;
+  -webkit-transition: all 1000ms ease;
+  -moz-transition: all 1000ms ease;
+  -ms-transition: all 1000ms ease;
+  -o-transition: all 1000ms ease;
+  transition: all 1000ms ease;  
+}
+
+footer .gopher:hover{
+  bottom: 0px;
 }
 
 /* ------------------------------------------------------------------------------------------------ */
@@ -219,21 +238,4 @@ body.home #main .block.intro .txt h2 {
   visibility: hidden;
   position: absolute;
   z-index: 1;
-}
-
-.gopher{
-  position: absolute;
-  bottom: 0px;
-  left: 70%;
-  width: 219px;
-  height: 144px;
-  background: url(../img/gopher.png) no-repeat;
-}
-
-.gopher3{
-  -webkit-transition: all 1000ms ease;
-  -moz-transition: all 1000ms ease;
-  -ms-transition: all 1000ms ease;
-  -o-transition: all 1000ms ease;
-  transition: all 1000ms ease;
 }
