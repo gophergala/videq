@@ -44,6 +44,11 @@ $(function(){
 		$('#list-of-not-uploded-files-holder').show();
 	}
 	
+	$("#drop-zone").hover(function(){
+
+		$(".gopher").toggleClass("over");
+
+	});
 
 
 	$(".bswitch").bootstrapSwitch();

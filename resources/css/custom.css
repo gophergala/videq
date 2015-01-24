@@ -15,9 +15,6 @@ html .td {
   display: table-cell; vertical-align: middle;
 }
 
-.hide{
-  display: none;
-}
 
 
 /* ------------------------------------------------------------------------------------------------ */
@@ -71,7 +68,8 @@ footer .gopher{
   transition: all 1000ms ease;  
 }
 
-footer .gopher:hover{
+footer .gopher:hover,
+footer .gopher.over{
   margin-bottom: 0px;
 }
 
