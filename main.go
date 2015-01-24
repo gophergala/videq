@@ -14,8 +14,8 @@ import (
 )
 
 const ROOT_PATH = "./"
-const NUM_OF_UPLOAD_WORKERS = 10
-const NUM_OF_UPLOAD_BUFFER = 100
+const NUM_OF_MERGE_WORKERS = 10
+const NUM_OF_MERGE_BUFFER = 100
 
 var completedFiles = make(chan string, 100)
 
@@ -48,7 +48,7 @@ func webServer(port string) {
 	homeHandler := home.NewHandler(ROOT_PATH)
 	http.Handle("/", homeHandler)
 
-	uploadHandler := upload.NewHandler(ROOT_PATH, NUM_OF_UPLOAD_BUFFER, NUM_OF_UPLOAD_WORKERS)
+	uploadHandler := upload.NewHandler(ROOT_PATH, NUM_OF_MERGE_BUFFER, NUM_OF_MERGE_WORKERS)
 	http.Handle("/upload/", uploadHandler)
 
 	log.Printf("Server started on port %v", port)
