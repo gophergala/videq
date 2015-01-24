@@ -19,8 +19,6 @@ const NUM_OF_MERGE_WORKERS = 10
 const NUM_OF_MERGE_BUFFER = 100
 const DSN = "root:m11@/videq"
 
-var completedFiles = make(chan string, 100)
-
 func init() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
