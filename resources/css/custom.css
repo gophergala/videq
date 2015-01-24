@@ -16,7 +16,11 @@ html .td {
 }
 
 
-a{
+a,
+a:link,
+a:visited,
+a:hover
+{
   color: #C90E0E;
 }
 
@@ -207,6 +211,8 @@ body.home #main .block.intro .txt h2 {
   background-color: rgba(255, 255, 255, 0.15);
   color: rgba(255, 255, 255, 0.15);
   position: relative;
+  cursor: pointer;
+  cursor: hand;
 }
 
 
@@ -224,7 +230,6 @@ body.home #main .block.intro .txt h2 {
 
 .upload-drop-zone a{
   font-size: 22px;
-  text-decoration: underline;
 }
 
 .upload-drop-zone .icon{
