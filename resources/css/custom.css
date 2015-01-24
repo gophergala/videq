@@ -16,6 +16,10 @@ html .td {
 }
 
 
+a{
+  color: #C90E0E;
+}
+
 
 /* ------------------------------------------------------------------------------------------------ */
 /* Logo
@@ -50,6 +54,7 @@ footer{
   bottom: 0px;
   width: 100%;
   color: #fff;
+  font-size: 12px;
 }
 
 
@@ -71,6 +76,13 @@ footer .gopher{
 footer .gopher:hover,
 footer .gopher.over{
   margin-bottom: 0px;
+}
+
+footer .rvatine{
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  background: url(../img/rvatine.gif) no-repeat;
 }
 
 /* ------------------------------------------------------------------------------------------------ */
@@ -212,7 +224,6 @@ body.home #main .block.intro .txt h2 {
 
 .upload-drop-zone a{
   font-size: 22px;
-  color: #E60000;
   text-decoration: underline;
 }
 
