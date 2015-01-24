@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"net/http"
 	"os"
@@ -28,6 +29,18 @@ func init() {
 }
 
 func main() {
+	webPort := flag.Int("web", 0, "Start web server on given port")
+	flag.Parse()
+
+	if *webPort > 0 {
+		webServer()
+		return
+	}
+
+	log.Println("Non server mode active")
+}
+
+func webServer() {
 	staticHandler := static.NewHandler(ROOT_PATH)
 	gzipStaticHandler := gzip.NewHandler(staticHandler)
 	http.Handle("/resources/", gzipStaticHandler)
