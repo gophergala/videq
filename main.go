@@ -31,7 +31,7 @@ func main() {
 	http.Handle("/", homeHandler)
 
 	log.Println("Server started on port 8094")
-	http.ListenAndServe(":8094", nil)
+	log.Print(http.ListenAndServe(":8094", nil))
 }
 
 func createStorage() error {
