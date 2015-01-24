@@ -2,7 +2,8 @@ package session
 
 import (
 	"database/sql"
-	"log"
+	//	"log"
+	alog "github.com/cenkalti/log"
 	"math/rand"
 	"net/http"
 	"time"
@@ -22,12 +23,16 @@ func sid(r *http.Request) (string, error) {
 type Handler struct {
 	dsn        string
 	passHandle http.Handler
+	log        alog.Logger
+	db         *sql.DB
 }
 
-func NewHandler(passHandler http.Handler, dsn string) *Handler {
+func NewHandler(log alog.Logger, db *sql.DB, passHandler http.Handler, dsn string) *Handler {
 	h := new(Handler)
 	h.passHandle = passHandler
-	h.dsn = dsn
+	h.log = log
+	h.db = db
+
 	return h
 }
 
@@ -35,13 +40,13 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	_, err := r.Cookie("sid")
 
 	if err == http.ErrNoCookie {
-		db, err := sql.Open("mysql", h.dsn)
-		if err != nil {
-			log.Print(err)
-			http.Error(w, "Internal server error", http.StatusInternalServerError)
-			return
-		}
-		defer db.Close()
+		// db, err := sql.Open("mysql", h.dsn)
+		// if err != nil {
+		// 	h.log.Error(err)
+		// 	http.Error(w, "Internal server error", http.StatusInternalServerError)
+		// 	return
+		// }
+		// defer db.Close()
 
 		var sid string
 
@@ -49,23 +54,23 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			getSid := func() (bool, error) {
 				sid = UniqueKey()
 
-				_, err := db.Exec("LOCK TABLE session WRITE")
+				_, err := h.db.Exec("LOCK TABLE session WRITE")
 				if err != nil {
 					return false, err
 				}
 				defer func() {
-					_, err := db.Exec("UNLOCK TABLES")
+					_, err := h.db.Exec("UNLOCK TABLES")
 					if err != nil {
-						log.Print(err)
+						h.log.Error(err)
 					}
 				}()
 
 				var exists int
-				err = db.QueryRow("SELECT 1 FROM session WHERE sid=? ", sid).Scan(&exists)
+				err = h.db.QueryRow("SELECT 1 FROM session WHERE sid=? ", sid).Scan(&exists)
 				switch {
 
 				case err == sql.ErrNoRows:
-					_, err := db.Exec("INSERT INTO session (sid, ts) VALUES (?, UNIX_TIMESTAMP())", sid)
+					_, err := h.db.Exec("INSERT INTO session (sid, ts) VALUES (?, UNIX_TIMESTAMP())", sid)
 					if err != nil {
 						return false, err
 					}
@@ -82,7 +87,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 			generated, err := getSid()
 			if err != nil {
-				log.Print(err)
+				h.log.Error(err)
 				http.Error(w, "Internal server error", http.StatusInternalServerError)
 				return
 			}

@@ -4,7 +4,8 @@ import (
 	"bytes"
 	"io"
 	"io/ioutil"
-	"log"
+	//	"log"
+	alog "github.com/cenkalti/log"
 	"net/http"
 	"os"
 	"sort"
@@ -17,10 +18,12 @@ type Handler struct {
 	numOfCompleteFileChBuffer int
 	numOfCompleteFileWorkers  int
 	completedFilesCh          chan string
+	log                       alog.Logger
 }
 
-func NewHandler(rootPath string, numOfCompleteFileChBuffer int, numOfCompleteFileWorkers int) *Handler {
+func NewHandler(log alog.Logger, rootPath string, numOfCompleteFileChBuffer int, numOfCompleteFileWorkers int) *Handler {
 	h := new(Handler)
+	h.log = log
 	h.rootPath = rootPath
 	h.numOfCompleteFileChBuffer = numOfCompleteFileChBuffer
 	h.numOfCompleteFileWorkers = numOfCompleteFileWorkers
@@ -177,14 +180,14 @@ func assembleFile(h *Handler) {
 
 		fileInfos, err := ioutil.ReadDir(path)
 		if err != nil {
-			log.Print(err)
+			h.log.Error(err)
 			return
 		}
 
 		// create final file to write to
 		dst, err := os.Create(h.rootPath + "/storage/datastore/" + strings.Split(path, "/")[4])
 		if err != nil {
-			log.Print(err)
+			h.log.Error(err)
 			return
 		}
 		defer dst.Close()
@@ -194,7 +197,7 @@ func assembleFile(h *Handler) {
 			func() {
 				src, err := os.Open(path + "/" + fs.Name())
 				if err != nil {
-					log.Print(err)
+					h.log.Error(err)
 					return
 				}
 				defer src.Close()
