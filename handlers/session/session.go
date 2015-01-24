@@ -10,7 +10,7 @@ import (
 
 import _ "github.com/go-sql-driver/mysql"
 
-func GetSid(r *http.Request) (string, error) {
+func sid(r *http.Request) (string, error) {
 	sid, err := r.Cookie("sid")
 	if err != nil {
 		return "", err
