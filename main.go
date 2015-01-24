@@ -32,6 +32,7 @@ func init() {
 
 	InitLogger()
 	LoadConfig()
+	checkExecutables()
 
 	err := createStorage()
 	if err != nil {
