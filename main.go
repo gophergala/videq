@@ -29,18 +29,18 @@ func init() {
 }
 
 func main() {
-	webPort := flag.Int("web", 0, "Start web server on given port")
+	webPort := flag.String("web", "", "Start web server on given port")
 	flag.Parse()
 
-	if *webPort > 0 {
-		webServer()
+	if *webPort != "" {
+		webServer(*webPort)
 		return
 	}
 
 	log.Println("Non server mode active")
 }
 
-func webServer() {
+func webServer(port string) {
 	staticHandler := static.NewHandler(ROOT_PATH)
 	gzipStaticHandler := gzip.NewHandler(staticHandler)
 	http.Handle("/resources/", gzipStaticHandler)
@@ -51,8 +51,8 @@ func webServer() {
 	uploadHandler := upload.NewHandler(ROOT_PATH, NUM_OF_UPLOAD_BUFFER, NUM_OF_UPLOAD_WORKERS)
 	http.Handle("/upload/", uploadHandler)
 
-	log.Println("Server started on port 8094")
-	log.Print(http.ListenAndServe(":8094", nil))
+	log.Printf("Server started on port %v", port)
+	log.Print(http.ListenAndServe(":"+port, nil))
 }
 
 func createStorage() error {
