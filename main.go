@@ -7,15 +7,17 @@ import (
 	"os"
 	"runtime"
 
+	"github.com/cenkalti/log"
 	"github.com/gophergala/videq/handlers/gzip"
 	"github.com/gophergala/videq/handlers/home"
 	"github.com/gophergala/videq/handlers/session"
 	"github.com/gophergala/videq/handlers/static"
 	"github.com/gophergala/videq/handlers/upload"
-
+	"github.com/gophergala/videq/janitor"
 	"github.com/gophergala/videq/mediatools"
 
 	"database/sql"
+
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -37,6 +39,8 @@ func init() {
 		log.Fatal(err)
 	}
 
+	janitor.StorageComplete = ROOT_PATH + "storage/datastore/"
+	janitor.StorageIncomplete = ROOT_PATH + "storage/.upload/"
 }
 
 func main() {

@@ -36,26 +36,33 @@ function getFilesListFromCookie() {
 	return parts
 }
 
-function refreshListOfStoredFiles() {
-	$.ajax({
-		url: "/list-of-files/",
-		dataType: "json"
-	}).done(function(files) {
-		$.each(files, function(ix, fileName){
-			$('#list-of-stored-files').append('<li><a href="/download/?filename=' + encodeURIComponent(fileName) + '">' + fileName + '</a></li>');
-		});
-
-		if (files.length > 0) {
-			$('#list-of-stored-files-holder').show();
-		} else {
-			$('#list-of-stored-files-holder').hide();
+var UploadLogic = {
+	firstPart: false,
+	onProgress: function() {
+		if flow.progress() == 0 {
+			return
 		}
-	});
+
+		if UploadLogic.firstPart == false {
+			flow.pause();
+			$.ajax({
+				url: "/check/",
+				dataType: "json"
+			}).done(function(data) {
+				console.log(data)
+			});
+		}
+		else {
+			var progress = flow.progress() * 100;
+			if (progress < 100) {
+				$('.progress-bar').css('width', progress + '%');
+			}
+		}
+	}
 }
 
-$(function(){
 
-	refreshListOfStoredFiles();
+$(function(){
 
 	var notCompletedFiles = getFilesListFromCookie();
 	if (notCompletedFiles != false) {
@@ -68,7 +75,10 @@ $(function(){
 	var flow = new Flow({
 	  target:'/upload/',
 	  uploadMethod: 'POST',
-	  testChunks: true
+	  testChunks: true,
+	  simultaneousUploads: 1,
+	  prioritizeFirstAndLastChunk: true,
+	  progressCallbacksInterval: 0
 	});
 	if (!flow.support) {
 		alert("Browser dose not support modern upload!");
@@ -90,17 +100,13 @@ $(function(){
 		removeFromCookie(file.name);
 	    $('#fileLog').append('<a href="#" class="list-group-item list-group-item-danger"><span class="badge alert-danger pull-right">Error</span>' + file.name + ' ' + message + '</a>');
 	});
-	flow.on('progress', function(){
-		var progress = flow.progress() * 100;
-		if (progress < 100) {
-			$('.progress-bar').css('width', progress + '%');
-		}
-	});
+
+	flow.on('progress', UploadLogic.onProgress);
+
 	flow.on('complete', function(){
 	    $('.progress-bar').css('width', '0%');
 	    $('#fileLog').append('<a href="#" class="list-group-item list-group-item-success"><span class="badge alert-success pull-right">Success</span>All upload completed</a>');
 	    $('#upload_form').show();
-	    refreshListOfStoredFiles();
 	});
 	flow.on('uploadStart', function(){
 	    $('#upload_form').hide();

@@ -3,15 +3,16 @@ package session
 import (
 	"database/sql"
 	//	"log"
-	alog "github.com/cenkalti/log"
 	"math/rand"
 	"net/http"
 	"time"
+
+	alog "github.com/cenkalti/log"
 )
 
 import _ "github.com/go-sql-driver/mysql"
 
-func sid(r *http.Request) (string, error) {
+func Sid(r *http.Request) (string, error) {
 	sid, err := r.Cookie("sid")
 	if err != nil {
 		return "", err

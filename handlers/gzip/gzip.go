@@ -37,17 +37,3 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	gzw := gzipResponseWriter{Writer: gz, ResponseWriter: w}
 	h.passHandle.ServeHTTP(gzw, r)
 }
-
-//func MakeGzipHandler(fn http.HandlerFunc) http.HandlerFunc {
-//	return func(w http.ResponseWriter, r *http.Request) {
-//		if !strings.Contains(r.Header.Get("Accept-Encoding"), "gzip") {
-//			fn(w, r)
-//			return
-//		}
-//		w.Header().Set("Content-Encoding", "gzip")
-//		gz := gzip.NewWriter(w)
-//		defer gz.Close()
-//		gzr := gzipResponseWriter{Writer: gz, ResponseWriter: w}
-//		fn(gzr, r)
-//	}
-//}
