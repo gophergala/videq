@@ -6,6 +6,7 @@ import (
 	"os"
 	"runtime"
 
+	"github.com/gophergala/videq/handlers/gzip"
 	"github.com/gophergala/videq/handlers/home"
 	"github.com/gophergala/videq/handlers/static"
 )
@@ -23,7 +24,8 @@ func init() {
 
 func main() {
 	staticHandler := static.NewHandler(ROOT_PATH)
-	http.Handle("/resources/", staticHandler)
+	gzipStaticHandler := gzip.NewHandler(staticHandler)
+	http.Handle("/resources/", gzipStaticHandler)
 
 	homeHandler := home.NewHandler(ROOT_PATH)
 	http.Handle("/", homeHandler)
