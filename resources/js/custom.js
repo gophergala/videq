@@ -61,8 +61,71 @@ var UploadLogic = {
 	}
 }
 
+var Videq = function () {
+
+	this.init = function () {
+
+		/* ------------------------------------------------------ */
+		/* Homepage / Add video to intro block
+		/* ------------------------------------------------------ */
+		var root = $('body.home'),
+			vid_cont = $('#intro_vid', root);
+
+		if( vid_cont.length > 0 && !Modernizr.touch && Modernizr.mq('only screen and (min-width: 781px)') ) {
+
+
+			var html = '<video autoplay loop poster="/resources/vid/loop.jpg">'+
+					   '<source src="/resources/vid/loop.mp4" type="video/mp4" />'+
+					   '<source src="/resources/vid/loop.webm" type="video/webm" />'+
+					   '<source src="/resources/vid/loop.ogv" type="video/ogg" />'+
+					   '</video>';
+
+			vid_cont.prepend(html);
+
+			var video = $('video', vid_cont).get(0);
+
+			$(window).scroll(function() {
+				pauseVid();
+			});
+
+			function pauseVid() {
+				if( $(window).scrollTop() > vid_cont.height() ) {
+					video.pause();
+				} else {
+					if( video.paused ) {
+						video.play();
+					}
+				}
+			}
+
+			// init
+			pauseVid();
+
+		}
+
+	};
+
+
+	this.submit = function () {
+
+	};
+
+	return {
+		init: this.init
+	};
+
+}
+
+
 
 $(function(){
+
+
+	var ggg = Videq();
+	ggg.init();
+
+
+	refreshListOfStoredFiles();
 
 	var notCompletedFiles = getFilesListFromCookie();
 	if (notCompletedFiles != false) {
@@ -73,13 +136,15 @@ $(function(){
 	}
 
 	var flow = new Flow({
-	  target:'/upload/',
+	  target: '/upload/',
 	  uploadMethod: 'POST',
 	  testChunks: true,
 	  simultaneousUploads: 1,
 	  prioritizeFirstAndLastChunk: true,
-	  progressCallbacksInterval: 0
+	  progressCallbacksInterval: 0,
+	  singleFile: true
 	});
+
 	if (!flow.support) {
 		alert("Browser dose not support modern upload!");
 		$('#upload_form').hide();
@@ -90,8 +155,9 @@ $(function(){
 
 	flow.on('fileAdded', function(file, event){
 		addToCookie(file.name);
-	    $('#fileLog').append('<a href="#" class="list-group-item list-group-item">' + file.name + ' added to upload queue</a>');
+		flow.upload();
 	});
+
 	flow.on('fileSuccess', function(file,message){
 		removeFromCookie(file.name);
 	    $('#fileLog').append('<a href="#" class="list-group-item list-group-item-success"><span class="badge alert-success pull-right">Success</span>' + file.name + ' ' + message + '</a>');
@@ -117,5 +183,12 @@ $(function(){
 		ev.preventDefault();
 		flow.upload();
 	});
+
+	$('.classic_upload').on("click", function(ev){
+		$('input[type=file]').click();
+    	return false;
+	});
+
+	$(".bswitch").bootstrapSwitch();
 
 });
