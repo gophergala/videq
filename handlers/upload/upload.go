@@ -191,13 +191,15 @@ func assembleFile(h *Handler) {
 
 		sort.Sort(ByChunk(fileInfos))
 		for _, fs := range fileInfos {
-			src, err := os.Open(path + "/" + fs.Name())
-			if err != nil {
-				log.Print(err)
-				return
-			}
-			defer src.Close()
-			io.Copy(dst, src)
+			func() {
+				src, err := os.Open(path + "/" + fs.Name())
+				if err != nil {
+					log.Print(err)
+					return
+				}
+				defer src.Close()
+				io.Copy(dst, src)
+			}()
 		}
 		os.RemoveAll(path)
 	}
