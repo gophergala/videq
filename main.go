@@ -9,6 +9,7 @@ import (
 
 	"github.com/gophergala/videq/handlers/gzip"
 	"github.com/gophergala/videq/handlers/home"
+	"github.com/gophergala/videq/handlers/session"
 	"github.com/gophergala/videq/handlers/static"
 	"github.com/gophergala/videq/handlers/upload"
 )
@@ -16,6 +17,7 @@ import (
 const ROOT_PATH = "./"
 const NUM_OF_MERGE_WORKERS = 10
 const NUM_OF_MERGE_BUFFER = 100
+const DSN = "root:m11@/videq"
 
 var completedFiles = make(chan string, 100)
 
@@ -46,7 +48,8 @@ func webServer(port string) {
 	http.Handle("/resources/", gzipStaticHandler)
 
 	homeHandler := home.NewHandler(ROOT_PATH)
-	http.Handle("/", homeHandler)
+	homeSidHandler := session.NewHandler(homeHandler, DSN)
+	http.Handle("/", homeSidHandler)
 
 	uploadHandler := upload.NewHandler(ROOT_PATH, NUM_OF_MERGE_BUFFER, NUM_OF_MERGE_WORKERS)
 	http.Handle("/upload/", uploadHandler)
