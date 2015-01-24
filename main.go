@@ -2,12 +2,12 @@ package main
 
 import (
 	"flag"
+	"os/exec"
 	//	"log"
 	"net/http"
 	"os"
 	"runtime"
 
-	"github.com/cenkalti/log"
 	"github.com/gophergala/videq/handlers/gzip"
 	"github.com/gophergala/videq/handlers/home"
 	"github.com/gophergala/videq/handlers/session"
@@ -17,7 +17,6 @@ import (
 	"github.com/gophergala/videq/mediatools"
 
 	"database/sql"
-
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -61,7 +60,8 @@ func main() {
 
 	log.Infoln("Non server mode active")
 
-	minfo, err := mediatools.GetMediaInfo()
+	mt := mediatools.NewMediaInfo(log)
+	minfo, err := mt.GetMediaInfo("_test/master_1080.mp4")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -137,4 +137,31 @@ func (d *Database) OpenDB(cfg DbConfig) (error, *Database) {
 
 func (d *Database) CloseDB() {
 	d.conn.Close()
+}
+
+var execList = map[string]string{
+	"mediainfo": "sudo apt-get install mediainfo",
+}
+
+func checkExecutables() {
+	var failed bool = false
+	for fileName, installHelp := range execList {
+		err := checkExecutable(fileName)
+		if err != nil {
+			log.Errorln(err)
+			log.Info("run: ", installHelp)
+			failed = true
+		}
+	}
+	if failed == true {
+		log.Fatalln("Missing executables, cannot continue. please fix and rerun.")
+	}
+}
+
+func checkExecutable(exename string) error {
+	_, err := exec.LookPath(exename)
+	if err != nil {
+		return err
+	}
+	return nil
 }
