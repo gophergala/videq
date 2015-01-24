@@ -42,7 +42,7 @@ function getFilesListFromCookie() {
 var UploadLogic = {
 
 	flow : false,
-	firstPart: false,
+	firstPart: true,
 	
 	init : function () {
 
@@ -127,7 +127,7 @@ var UploadLogic = {
 			return
 		}
 
-		if (UploadLogic.firstPart == false) {
+		if (UploadLogic.firstPart == true) {
 			UploadLogic.flow.pause();
 			$.ajax({
 				url: "/check/",
