@@ -10,6 +10,15 @@ import (
 
 import _ "github.com/go-sql-driver/mysql"
 
+func GetSid(r *http.Request) (string, error) {
+	sid, err := r.Cookie("sid")
+	if err != nil {
+		return "", err
+	}
+
+	return sid.String(), nil
+}
+
 type Handler struct {
 	dsn        string
 	passHandle http.Handler
