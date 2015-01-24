@@ -61,6 +61,8 @@ var UploadLogic = {
 			alert("Browser dose not support modern upload!");
 			$('#upload_form').hide();
 		}
+
+		this.bindEvents();
 	},
 
 	bindEvents: function () {
@@ -99,8 +101,9 @@ var UploadLogic = {
 			flow.upload();
 		});
 
-		$('.classic_upload').on("click", function(ev){
+		$('a.trigger-browse-files').on("click", function(ev){
 			$('input[type=file]').click();
+			console.log("asdasdasd");
 	    	return false;
 		});
 

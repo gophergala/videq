@@ -35,7 +35,6 @@ header{
   margin-left: -164px;  
 }
 
-
 header .logo {
   width: 100%;
   height: 100%;
@@ -52,14 +51,15 @@ footer{
   position: absolute;
   left: 5%;
   bottom: 0px;
-  width: auto;
+  width: 100%;
   color: #fff;
 }
 
 
 footer .gopher{
-  position: absolute;
-  bottom: -40px;
+  position: fixed;
+  bottom: 0px;
+  margin-bottom: -40px;
   left: 70%;
   width: 219px;
   height: 144px;
@@ -72,7 +72,7 @@ footer .gopher{
 }
 
 footer .gopher:hover{
-  bottom: 0px;
+  margin-bottom: 0px;
 }
 
 /* ------------------------------------------------------------------------------------------------ */
@@ -147,14 +147,9 @@ body.home #main .block.intro .txt h2 {
 
 @media screen and (min-width:921px) {
 
-
-
 }
 
 @media screen and (max-width:920px) {
-
-
-
 
 }
 
@@ -196,7 +191,7 @@ body.home #main .block.intro .txt h2 {
 .upload-drop-zone {
   width: 100%;
   margin-top: 20%;
-  height: 240px;
+  min-height: 240px;
   color: #ccc;
   text-align: center;
   background-color: rgba(255, 255, 255, 0.15);
@@ -234,8 +229,10 @@ body.home #main .block.intro .txt h2 {
   margin-right: auto;
 }
 
-#js-upload-form{
-  visibility: hidden;
+#browse-file{
   position: absolute;
-  z-index: 1;
+  top: 0px;
+  left: 0px;
+  z-index: -1;
+  visibility: hidden;
 }
