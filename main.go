@@ -9,9 +9,14 @@ import (
 	"github.com/gophergala/videq/handlers/gzip"
 	"github.com/gophergala/videq/handlers/home"
 	"github.com/gophergala/videq/handlers/static"
+	"github.com/gophergala/videq/handlers/upload"
 )
 
 const ROOT_PATH = "./"
+const NUM_OF_UPLOAD_WORKERS = 10
+const NUM_OF_UPLOAD_BUFFER = 100
+
+var completedFiles = make(chan string, 100)
 
 func init() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
@@ -29,6 +34,9 @@ func main() {
 
 	homeHandler := home.NewHandler(ROOT_PATH)
 	http.Handle("/", homeHandler)
+
+	uploadHandler := upload.NewHandler(ROOT_PATH, NUM_OF_UPLOAD_BUFFER, NUM_OF_UPLOAD_WORKERS)
+	http.Handle("/upload/", uploadHandler)
 
 	log.Println("Server started on port 8094")
 	log.Print(http.ListenAndServe(":8094", nil))
