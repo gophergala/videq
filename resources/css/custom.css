@@ -1,19 +1,239 @@
-/* layout.css Style */
-.upload-drop-zone {
-  height: 200px;
-  border-width: 2px;
-  margin-bottom: 20px;
+body{
+  overflow: hidden;
+  font-family: Helvetica, Arial, sans-serif;
 }
 
-/* skin.css Style*/
-.upload-drop-zone {
-  color: #ccc;
-  border-style: dashed;
-  border-color: #ccc;
-  line-height: 200px;
-  text-align: center
+html .container {
+  max-width: 1004px;
+  padding: 0 14px;
+  margin: 0 auto;
 }
+html .t {
+  display: table; width: 100%; height: 100%;
+}
+html .td {
+  display: table-cell; vertical-align: middle;
+}
+
+.hide{
+  display: none;
+}
+
+
+/* ------------------------------------------------------------------------------------------------ */
+/* Logo
+/* ------------------------------------------------------------------------------------------------ */
+
+header{
+  position: absolute;
+  z-index: 10000;
+  width: 100%;
+  text-align: center;
+  width: 329px;
+  height: 132px;
+  left: 50%;
+  margin-left: -164px;  
+}
+
+
+header .logo {
+  width: 100%;
+  height: 100%;
+  display: block;
+  background: url(../img/logo.png) no-repeat 0 0;
+  margin-top: 40px;
+}
+
+header h1 {
+  display: none;
+}
+
+footer{
+  position: absolute;
+  left: 5%;
+  bottom: 20px;
+  width: auto;
+  color: #fff;
+}
+
+/* ------------------------------------------------------------------------------------------------ */
+/* Main / Video block (Homepage - template_home)
+/* ------------------------------------------------------------------------------------------------ */
+
+body.home #main .block.intro {
+  height: 100vh;
+  min-height: 840px;
+  position: relative;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-size: cover;
+}
+body.home #main .block.intro #intro_vid {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+}
+body.home #main .block.intro #intro_vid:after,
+body.home #main .block.intro #intro_vid:before {
+  left: 0;
+  width: 100%;
+  content: '';
+  position: absolute;
+  background: repeat-x 0 0;
+}
+body.home #main .block.intro #intro_vid:after {
+  bottom: 0;
+  height: 394px;
+  background-position: 0 -165px;
+}
+body.home #main .block.intro #intro_vid:before {
+  top: 0;
+  height: 165px;
+}
+body.home #main .block.intro #intro_vid video {
+  min-width: 100%;
+  min-height: 100%;
+  object-fit: cover;
+}
+body.home #main .block.intro #intro_vid .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+body.home #main .block.intro .txt {
+  position: absolute; text-align: center; padding: 0;
+  top: 110px; left: 0; right: 0; bottom: 328px; /* height of .featured */
+}
+body.home #main .block.intro .txt .t {
+  display: table; width: 100%; height: 100%;
+}
+body.home #main .block.intro .txt .td {
+  display: table-cell; vertical-align: middle;
+}
+body.home #main .block.intro .txt h2 {
+  color: #fff; 
+  margin: 0 0 36px;
+  font-size: 78px; 
+  font-size: 7.8rem; 
+  font-weight: normal; 
+  line-height: 1.36em;
+  text-align: center;
+  text-shadow: 0 0 80px rgba(0,0,0,0.8);
+}
+
+@media screen and (min-width:921px) {
+
+
+
+}
+
+@media screen and (max-width:920px) {
+
+
+
+
+}
+
+@media screen and (max-width:780px) {
+
+  body.home #main .block.intro {
+    height: auto;
+    min-height: 0;
+  }
+  body.home #main .block.intro .txt {
+    position: relative;
+    bottom: 0;
+    top: 0;
+    padding: 140px 0 40px;
+  }
+  body.home #main .block.intro #intro_vid .overlay {
+    display: none;
+  }
+
+}
+
+@media screen and (max-width:580px) {
+
+  body.home #main .block.intro .txt h2 {
+    font-size: 40px;
+    font-size: 4.0rem;
+    line-height: 1.37em;
+    padding: 0 15px;
+  }
+
+}
+
+
+
+
+/* ------------------------------------------------------------------------------------------------ */
+/* Drop Zone
+/* ------------------------------------------------------------------------------------------------ */
+.upload-drop-zone {
+  width: 100%;
+  margin-top: 20%;
+  height: 240px;
+  color: #ccc;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.15);
+  position: relative;
+}
+
+
 .upload-drop-zone.drop {
   color: #222;
   border-color: #222;
+}
+
+
+.upload-drop-zone p{
+  font-size: 22px;
+  color: #fff;
+  margin-top: 40px;
+}
+
+.upload-drop-zone a{
+  font-size: 22px;
+  color: #E60000;
+  text-decoration: underline;
+}
+
+.upload-drop-zone .icon{
+  margin-top: 20px;
+  font-size: 70px;
+  color: #FFF;
+  color: rgba(255, 255, 255, 0.2);
+  width: 1.1em;
+  height: 1em;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#js-upload-form{
+  visibility: hidden;
+  position: absolute;
+  z-index: 1;
+}
+
+.gopher{
+  position: absolute;
+  bottom: 0px;
+  left: 70%;
+  width: 219px;
+  height: 144px;
+  background: url(../img/gopher.png) no-repeat;
+}
+
+.gopher3{
+  -webkit-transition: all 1000ms ease;
+  -moz-transition: all 1000ms ease;
+  -ms-transition: all 1000ms ease;
+  -o-transition: all 1000ms ease;
+  transition: all 1000ms ease;
 }
