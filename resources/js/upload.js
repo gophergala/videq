@@ -46,7 +46,7 @@ var UploadLogic = {
 	
 	init : function () {
 
-		this.flow = new Flow({
+		UploadLogic.flow = new Flow({
 			target: '/upload/',
 			uploadMethod: 'POST',
 			testChunks: true,
@@ -57,53 +57,65 @@ var UploadLogic = {
 		});
 
 
-		if (!this.flow.support) {
+		if (!UploadLogic.flow.support) {
 			alert("Browser dose not support modern upload!");
 			$('#upload_form').hide();
 		}
 
-		this.bindEvents();
+		UploadLogic.bindEvents();
 	},
 
 	bindEvents: function () {
 
-		this.flow.assignBrowse(document.getElementById('js-upload-files'));
-		this.flow.assignDrop(document.getElementById('drop-zone'));
+		var self = this;
 
-		this.flow.on('fileAdded', function(file, event){
+		UploadLogic.flow.assignBrowse(document.getElementById('js-upload-files'));
+		UploadLogic.flow.assignDrop(document.getElementById('drop-zone'));
+
+		UploadLogic.flow.on('fileAdded', function(file, event){
 			addToCookie(file.name);
-			this.flow.upload();
+
+			setTimeout(function(){
+
+				UploadLogic.flow.upload();
+				
+			},1);
+
 		});
 
-		this.flow.on('fileSuccess', function(file,message){
+		UploadLogic.flow.on('fileSuccess', function(file,message){
 			removeFromCookie(file.name);
 		    $('#fileLog').append('<a href="#" class="list-group-item list-group-item-success"><span class="badge alert-success pull-right">Success</span>' + file.name + ' ' + message + '</a>');
 		});
-		this.flow.on('fileError', function(file, message){
+		UploadLogic.flow.on('fileError', function(file, message){
 			removeFromCookie(file.name);
 		    $('#fileLog').append('<a href="#" class="list-group-item list-group-item-danger"><span class="badge alert-danger pull-right">Error</span>' + file.name + ' ' + message + '</a>');
 		});
 
-		this.flow.on('progress', UploadLogic.onProgress);
+		UploadLogic.flow.on('progress', UploadLogic.onProgress);
 
-		this.flow.on('complete', function(){
+		UploadLogic.flow.on('complete', function(){
 		    $('.progress-bar').css('width', '0%');
 		    $('#fileLog').append('<a href="#" class="list-group-item list-group-item-success"><span class="badge alert-success pull-right">Success</span>All upload completed</a>');
 		    $('#upload_form').show();
 		});
-		this.flow.on('uploadStart', function(){
+		UploadLogic.flow.on('uploadStart', function(){
 		    $('#upload_form').hide();
 			$('#list-of-not-uploded-files-holder').hide();
 		});
 
 		$('#js-upload-form').submit(function(ev){
 			ev.preventDefault();
-			flow.upload();
+			
+			setTimeout(function(){
+
+				UploadLogic.flow.upload();
+				
+			},1);
 		});
 
 		$('a.trigger-browse-files').on("click", function(ev){
 			$('input[type=file]').click();
-			console.log("asdasdasd");
 	    	return false;
 		});
 
@@ -111,12 +123,12 @@ var UploadLogic = {
 
 	onProgress: function () {
 		
-		if (this.flow.progress == 0) {
+		if (UploadLogic.flow.progress == 0) {
 			return
 		}
 
 		if (UploadLogic.firstPart == false) {
-			this.flow.pause();
+			UploadLogic.flow.pause();
 			$.ajax({
 				url: "/check/",
 				dataType: "json"
@@ -125,7 +137,7 @@ var UploadLogic = {
 			});
 		}
 		else {
-			var progress = this.flow.progress() * 100;
+			var progress = UploadLogic.flow.progress() * 100;
 			if (progress < 100) {
 				$('.progress-bar').css('width', progress + '%');
 			}
@@ -134,7 +146,7 @@ var UploadLogic = {
 };
 
 
-$(function(){
+jQuery(document).ready(function(){
 
 	UploadLogic.init();
 

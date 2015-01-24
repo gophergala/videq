@@ -20,10 +20,6 @@ var Video = {
 					   '</video>';
 
 			vid_cont.prepend(html);
-
-			//var video = $('video', vid_cont).get(0);
-
-
 		}
 
 	}
