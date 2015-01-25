@@ -50,7 +50,7 @@ func main() {
 	}
 	defer db.CloseDB()
 
-	janitor.Init(db.conn, ROOT_PATH+"storage/datastore/", ROOT_PATH+"storage/.upload/", log)
+	janitor.Init(db.conn, ROOT_PATH+"storage", ROOT_PATH+"storage/datastore/", ROOT_PATH+"storage/.upload/", log)
 
 	webPort := flag.String("web", "", "Start web server on given port")
 	flag.Parse()

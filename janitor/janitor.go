@@ -1,14 +1,23 @@
 package janitor
 
 import (
+	"bytes"
 	"database/sql"
+	"errors"
+	"io"
+	"io/ioutil"
 	"os"
+	"os/exec"
+	"regexp"
+	"strconv"
 	"strings"
+	"time"
 
 	alog "github.com/cenkalti/log"
 	"github.com/gophergala/videq/mediatools"
 )
 
+var Storage string
 var StorageIncomplete string
 var StorageComplete string
 var DbConn *sql.DB
@@ -16,9 +25,11 @@ var log alog.Logger
 
 var cleanUploadFolderCh chan string
 var encodePathCh chan string
+var allowedToUlCh chan bool
 
-func Init(db *sql.DB, sc, si string, l alog.Logger) {
+func Init(db *sql.DB, s, sc, si string, l alog.Logger) {
 	DbConn = db
+	Storage = s
 	StorageComplete = sc
 	StorageIncomplete = si
 	log = l
@@ -32,6 +43,9 @@ func Init(db *sql.DB, sc, si string, l alog.Logger) {
 	for i := 0; i < 3; i++ {
 		go encodeWorker(encodePathCh)
 	}
+
+	allowedToUlCh = make(chan bool)
+	go freeSpaceCheckWorker()
 }
 
 func CleanupUser(sid string) error {
@@ -45,6 +59,10 @@ func CleanupUser(sid string) error {
 	}
 
 	return nil
+}
+
+func IsAllowedToUpload() bool {
+	return <-allowedToUlCh
 }
 
 // check if current user is uploading a file?
@@ -144,4 +162,66 @@ func cleanupIncompleteFolderWorker(pathCh <-chan string) {
 	for path := range pathCh {
 		os.RemoveAll(path)
 	}
+}
+
+func freeSpaceCheckWorker() {
+	isFree := true
+
+	ct := time.Tick(2 * time.Minute)
+
+	for {
+		select {
+		case allowedToUlCh <- isFree:
+			break
+		case <-ct:
+			cmd := exec.Command("du", "-bcs", Storage)
+
+			var out bytes.Buffer
+			cmd.Stdout = &out
+
+			var stderr bytes.Buffer
+			cmd.Stderr = &stderr
+
+			cmd.Run()
+
+			readerFromOut := bytes.NewReader(out.Bytes())
+			readerFromErr := bytes.NewReader(stderr.Bytes())
+
+			rM := io.MultiReader(readerFromOut, readerFromErr)
+
+			commandOutputComplete, err := ioutil.ReadAll(rM)
+			if err != nil {
+				log.Error(err)
+				break
+			}
+
+			sizeInB, err := extractSizeFromString(string(commandOutputComplete))
+			if err != nil {
+				log.Error(err)
+				break
+			}
+
+			isFree = true
+			if sizeInB > 50000000000 {
+				isFree = false
+			}
+			break
+		}
+	}
+}
+
+func extractSizeFromString(source string) (int64, error) {
+	re := regexp.MustCompile("^([0-9]+)")
+
+	submatches := re.FindStringSubmatch(source)
+	if len(submatches) < 2 {
+		return 0, errors.New("Size not found")
+	}
+
+	i, err := strconv.ParseInt(submatches[1], 10, 64)
+	if err != nil {
+		return 0, err
+	}
+
+	return i, nil
 }
