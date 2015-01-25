@@ -99,9 +99,14 @@ var UploadLogic = {
 		    $('#fileLog').append('<a href="#" class="list-group-item list-group-item-success"><span class="badge alert-success pull-right">Success</span>All upload completed</a>');
 		    $('#upload_form').show();
 		});
+		
 		UploadLogic.flow.on('uploadStart', function(){
-		    $('#upload_form').hide();
-			$('#list-of-not-uploded-files-holder').hide();
+
+/*		    $('#upload_form').hide();
+			$('#list-of-not-uploded-files-holder').hide();*/
+
+			Screen.show("screen-check-bar");
+
 		});
 
 		$('#js-upload-form').submit(function(ev){
@@ -117,6 +122,17 @@ var UploadLogic = {
 		$('a.trigger-browse-files').on("click", function(ev){
 			$('input[type=file]').click();
 	    	return false;
+		});
+
+		$("#drop-zone").on("dragover", function(){
+
+			$(this).addClass("over");
+		});
+
+		$("#drop-zone").on("dragleave", function(){
+
+			$(this).removeClass("over");
+
 		});
 
 	},
