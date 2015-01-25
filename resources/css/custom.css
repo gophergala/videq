@@ -151,7 +151,7 @@ body #main .block.intro #intro_vid .overlay{
     left: 0;
     width: 100%;
     height: 100%;
-    margin-top: 20%; 
+    margin-top: 16%; 
 }
 body #main .overlay .container{
   display: none;
@@ -433,6 +433,7 @@ body .screen.screen-progress-bar .txt{
 
 .flashmsg div.warning{
     background-color: #ffb600;
+    color: #4F523A !important;
 }
 
 
