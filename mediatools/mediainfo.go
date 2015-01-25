@@ -26,23 +26,24 @@ func NewMediaInfo(log alog.Logger) *MediaInfo {
 }
 
 type MediaFileInfo struct {
-	FileName       string
-	FileSize_bytes string
-	VideoCount     int
-	AudioCount     int
-	Duration_ms    string
-	Duration       time.Duration
-	Format         string
-	CodecID        string
-	Resolution     string
-	Width          string
-	Height         string
-	Standard       string
-	Codec          string
-	Bitrate_bps    string
-	Framerate      string
-	AspectRatio    string
-	Audio          string
+	FileName        string
+	FileSize_bytes  string
+	VideoCount      int
+	AudioCount      int
+	Duration_ms     string
+	Duration        time.Duration
+	Duration_string string
+	Format          string
+	CodecID         string
+	Resolution      string
+	Width           string
+	Height          string
+	Standard        string
+	Codec           string
+	Bitrate_bps     string
+	Framerate       string
+	AspectRatio     string
+	Audio           string
 }
 
 // Commonly supported resolutions and aspect ratios include:
@@ -163,7 +164,9 @@ Text_End;.\r\n
 			dur, err := time.ParseDuration(paramValue + "ms")
 			if err == nil {
 				fileInfo.Duration = dur
-				m.log.Debug(dur)
+				fileInfo.Duration_string = fmt.Sprintf("%s", dur)
+			} else {
+				m.log.Error(dur)
 			}
 		case `Format`:
 			fileInfo.Format = paramValue
@@ -193,6 +196,11 @@ Text_End;.\r\n
 	return fileInfo, nil
 }
 
+// CheckMedia checks if video file is ok for encoding
+// TODO: more checks
+// 1. limit output resolutions ONLY to the same of original video or LOWER ones
+// 2. input format check
+
 func (m *MediaInfo) CheckMedia(fileName string) (ok bool, fileInfo MediaFileInfo, res map[string]VideoResolution, err error) {
 	res = m.resolutions
 
@@ -208,6 +216,13 @@ func (m *MediaInfo) CheckMedia(fileName string) (ok bool, fileInfo MediaFileInfo
 	if err != nil {
 		m.log.Error(err)
 		return false, fileInfo, nil, err
+	}
+
+	//maxDuration := time.Second * 60
+	maxDuration := time.Minute * 5
+	if fileInfo.Duration > maxDuration {
+		m.log.Infoln(fileInfo.Duration)
+		return false, fileInfo, nil, errors.New(fmt.Sprintf("File '%s' is too long. Max duration: %s, File duration: %s", fileName, maxDuration, fileInfo.Duration_string))
 	}
 
 	return true, fileInfo, m.resolutions, nil
