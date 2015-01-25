@@ -120,7 +120,7 @@ func encodeEnded(sid string, err error) {
 		success = 0
 	}
 
-	_, err := DbConn.Exec("UPDATE file SET encode_end_ts=UNIX_TIMESTAMP(), encode_error=?, success=? WHERE sid=?", errorTxt, success, sid)
+	_, err = DbConn.Exec("UPDATE file SET encode_end_ts=UNIX_TIMESTAMP(), encode_error=?, success=? WHERE sid=?", errorTxt, success, sid)
 	if err != nil {
 		log.Error(err)
 		return
