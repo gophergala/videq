@@ -31,6 +31,10 @@ p{
   color: #fff;
 }
 
+input, textarea, button{
+  color: #000;
+}
+
 /* ------------------------------------------------------------------------------------------------ */
 /* Logo
 /* ------------------------------------------------------------------------------------------------ */
@@ -278,6 +282,21 @@ body .screen.screen-error-bar .imoon{
 
 
 /* ------------------------------------------------------------------------------------------------ */
+/* Setup bar
+/* ------------------------------------------------------------------------------------------------ */
+body .screen.screen-setup-bar .inner{
+    width: 600px !important;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+body .screen.screen-setup-bar .txt{
+    padding-top: 40px; 
+    padding-bottom: 40px; 
+}
+
+
+/* ------------------------------------------------------------------------------------------------ */
 /* Progress bar
 /* ------------------------------------------------------------------------------------------------ */
 body .screen.screen-progress-bar .inner{
@@ -328,6 +347,10 @@ body .screen.screen-progress-bar .txt{
     display: inline;
 }
 
+.flashmsg div strong{
+  color: #0fc95e; 
+}
+
 .flashmsg div.error{
     background-color: #9a1a1c;
 
@@ -338,7 +361,7 @@ body .screen.screen-progress-bar .txt{
 }
 
 .flashmsg div.info{
-    background-color: #fdb501;
+
 }
 
 

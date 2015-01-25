@@ -88,11 +88,57 @@
                     <i class="imoon icon-bug" aria-hidden="true"></i>
                 </div>
 
-                <div class="txt">
+                <div class="txt info">
                     <p>Video size is not supported. Try again with another size.</p>
                 </div>
 
             </div><!-- .screen-resume-bar -->
+
+
+
+            <div class="screen screen-setup-bar">
+
+                <div class="inner">
+
+                    <div class="txt">
+
+                        <p>Select your video size: </p>
+                        
+                        <form method="POST" id="output_data">
+
+                            <label> Video width:
+                            <input name="output_width" type="text" value="1920">
+                            </label>
+                            
+                            <label> Video height:
+                            <input name="output_height" type="text" value="1080" >
+                            </label>
+
+                            <label> Lave audio:
+                            <input name="output_leave_audio" type="text" value="1" >
+                            </label>
+
+                            <label> Generate HTML:
+                            <input name="output_generate_html" type="text" value="1" >
+                            </label>
+
+                            <label> Generate First Frame:
+                            <input name="output_generate_first_frame" type="text" value="1" >
+                            </label>
+
+                            <button type="submit" class="trigger_upload_video">Go, upload video!</button>
+                        </form>
+
+                    </div>
+                    
+
+                    
+                   
+
+                </div>  
+
+            </div><!-- .screen-setup-bar -->
+
 
 
             <div class="screen screen-progress-bar">

@@ -58,11 +58,17 @@ var UploadLogic = {
 
 
 		if (!UploadLogic.flow.support) {
-			alert("Browser dose not support modern upload!");
-			$('#upload_form').hide();
+			Msg.error("Browser dose not support modern upload!");
 		}
 
 		UploadLogic.bindEvents();
+	},
+
+
+	submitSetup : function () {
+
+
+
 	},
 
 	bindEvents: function () {
@@ -78,6 +84,7 @@ var UploadLogic = {
 			setTimeout(function(){
 
 				UploadLogic.flow.upload();
+				Screen.show("screen-error-bar");
 				
 			},1);
 
@@ -92,7 +99,73 @@ var UploadLogic = {
 		    $('#fileLog').append('<a href="#" class="list-group-item list-group-item-danger"><span class="badge alert-danger pull-right">Error</span>' + file.name + ' ' + message + '</a>');
 		});
 
-		UploadLogic.flow.on('progress', UploadLogic.onProgress);
+		UploadLogic.flow.on('fileProgress', function () {
+
+			console.log("fileProgress");
+
+			var progress = UploadLogic.flow.progress() * 100;
+			if (progress < 100) {
+				$('.progress-bar').css('width', progress + '%');
+			}			
+
+		});
+
+		UploadLogic.flow.on('progress', function () {
+			
+			console.log("progress", UploadLogic.flow);
+
+			if (UploadLogic.flow.progress == 0) {
+				//return
+			}
+
+			if (UploadLogic.firstPart == true) {
+				
+				UploadLogic.flow.pause();
+
+				$.ajax({
+					url: "/check/",
+					dataType: "json"
+				}).done(function(data) {
+					
+					console.log(data);
+
+					if(data.Procede===true)
+					{
+						console.log("Procede yes");
+
+
+						Screen.show("screen-setup-bar");
+
+						var videoInfo = "Video info: <strong>";
+						if(data.OriginalInfo.Duration!==undefined) videoInfo += " Duration: " + data.OriginalInfo.Duration;
+						if(data.OriginalInfo.Resolution!==undefined) videoInfo += " | Resolution: " + data.OriginalInfo.Resolution;
+						if(data.OriginalInfo.Framerate!==undefined) videoInfo += " | Framerate: " + data.OriginalInfo.Framerate + " fps";
+						if(data.OriginalInfo.AspectRatio!==undefined) videoInfo += " | AspectRatio: " + data.OriginalInfo.AspectRatio;
+						if(data.OriginalInfo.Bitrate_bps!==undefined) videoInfo += " | Bitrate: " + data.OriginalInfo.Bitrate_bps + " bps";
+						videoInfo += "</strong>";
+
+						Msg.info(videoInfo);
+					}
+					else
+					{
+						console.log("Procede no");
+
+						Screen.show("screen-error-bar");
+						Msg.error(data.Err);
+					}
+
+				});
+			}
+			else 
+			{
+
+/*				var progress = UploadLogic.flow.progress() * 100;
+				if (progress < 100) {
+					$('.progress-bar').css('width', progress + '%');
+				}*/
+
+			}
+		});
 
 		UploadLogic.flow.on('complete', function(){
 		    $('.progress-bar').css('width', '0%');
@@ -101,23 +174,18 @@ var UploadLogic = {
 		});
 		
 		UploadLogic.flow.on('uploadStart', function(){
-
-/*		    $('#upload_form').hide();
-			$('#list-of-not-uploded-files-holder').hide();*/
-
-			Screen.show("screen-check-bar");
-
-		});
-
-		$('#js-upload-form').submit(function(ev){
-			ev.preventDefault();
 			
-			setTimeout(function(){
+			if(Screen.active=="screen-drop-zone")
+			{
+				Screen.show("screen-check-bar");
+			}
+			else
+			{
+				Screen.show("screen-progress-bar");	
+			}
 
-				UploadLogic.flow.upload();
-				
-			},1);
 		});
+
 
 		$('a.trigger-browse-files').on("click", function(ev){
 			$('input[type=file]').click();
@@ -125,39 +193,51 @@ var UploadLogic = {
 		});
 
 		$("#drop-zone").on("dragover", function(){
-
 			$(this).addClass("over");
 		});
 
 		$("#drop-zone").on("dragleave", function(){
-
 			$(this).removeClass("over");
-
 		});
 
-	},
+		$('#js-upload-form').on("submit", function(ev){
+			ev.preventDefault();
+			
+			setTimeout(function(){
+				UploadLogic.flow.upload();
+			},1);
+		});
 
-	onProgress: function () {
-		
-		if (UploadLogic.flow.progress == 0) {
-			return
-		}
+		$("form#output_data").on("submit", function(e){
+			
+			e.preventDefault();
+			
+			console.log("setup", UploadLogic.flow);
 
-		if (UploadLogic.firstPart == true) {
-			UploadLogic.flow.pause();
+			setTimeout(function(){
+
+				UploadLogic.flow.resume();
+				
+			},1);
+
+
+			
+
 			$.ajax({
-				url: "/check/",
-				dataType: "json"
+				url: "/encode/",
+				dataType: "json",
+				data: $(this).serialize(),
 			}).done(function(data) {
-				console.log(data)
+				
+				console.log(data);
+
+
+
 			});
-		}
-		else {
-			var progress = UploadLogic.flow.progress() * 100;
-			if (progress < 100) {
-				$('.progress-bar').css('width', progress + '%');
-			}
-		}
+
+
+		});		
+
 	}
 };
 

@@ -14,9 +14,9 @@ var Video = {
 
 
 			var html = '<video autoplay loop poster="/resources/vid/loop.jpg">' +
-					   '<source src="/resources/vid/Videq-SW.mp4" type="video/mp4" />' +
+/*					   '<source src="/resources/vid/Videq-SW.mp4" type="video/mp4" />' +
 					   '<source src="/resources/vid/Videq-SW.webm" type="video/webm" />' +
-					   '<source src="/resources/vid/Videq-SW.ogv" type="video/ogg" />' +
+					   '<source src="/resources/vid/Videq-SW.ogv" type="video/ogg" />' +*/
 					   '</video>';
 
 			vid_cont.prepend(html);
@@ -98,11 +98,12 @@ var Msg = {
 };
 
 
+
 $(function(){
 
 
 	Video.init();
-	Screen.init('screen-progress-bar');
+	Screen.init();
 	Msg.init();
 
 	var notCompletedFiles = getFilesListFromCookie();
