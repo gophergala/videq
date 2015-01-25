@@ -16,11 +16,16 @@ import (
 	"github.com/gophergala/videq/janitor"
 )
 
+type FileToAssemble struct {
+	PathToParts      string
+	OriginalFilename string
+}
+
 type Handler struct {
 	rootPath                  string
 	numOfCompleteFileChBuffer int
 	numOfCompleteFileWorkers  int
-	completedFilesCh          chan string
+	completedFilesCh          chan *FileToAssemble
 	log                       alog.Logger
 }
 
@@ -31,7 +36,7 @@ func NewHandler(log alog.Logger, rootPath string, numOfCompleteFileChBuffer int,
 	h.numOfCompleteFileChBuffer = numOfCompleteFileChBuffer
 	h.numOfCompleteFileWorkers = numOfCompleteFileWorkers
 
-	h.completedFilesCh = make(chan string, h.numOfCompleteFileChBuffer)
+	h.completedFilesCh = make(chan *FileToAssemble, h.numOfCompleteFileChBuffer)
 
 	for i := 0; i < h.numOfCompleteFileWorkers; i++ {
 		go assembleFile(h)
@@ -135,11 +140,11 @@ func (h *Handler) streamUpload(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	if chunkNo == "1" {
-		io.Copy(buf, part)
-		fileName := buf.String()
-		buf.Reset()
+	io.Copy(buf, part)
+	fileName := buf.String()
+	buf.Reset()
 
+	if chunkNo == "1" {
 		err = janitor.RecordFilename(sid, fileName)
 		if err != nil {
 			h.log.Error(err)
@@ -191,7 +196,8 @@ func (h *Handler) streamUpload(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if flowTotalSizeInt64 == currentSize {
-		h.completedFilesCh <- chunkDirPath
+		fta := &FileToAssemble{chunkDirPath, fileName}
+		h.completedFilesCh <- fta
 	}
 }
 
@@ -214,16 +220,18 @@ func (a ByChunk) Less(i, j int) bool {
 }
 
 func assembleFile(h *Handler) {
-	for path := range h.completedFilesCh {
+	for fta := range h.completedFilesCh {
 
-		fileInfos, err := ioutil.ReadDir(path)
+		fileInfos, err := ioutil.ReadDir(fta.PathToParts)
 		if err != nil {
 			h.log.Error(err)
 			return
 		}
 
+		partFilename := strings.Split(fta.OriginalFilename, ".")
+
 		// create final file to write to
-		dst, err := os.Create(h.rootPath + "storage/datastore/" + strings.Split(path, "/")[4] + "/original")
+		dst, err := os.Create(h.rootPath + "storage/datastore/" + strings.Split(fta.PathToParts, "/")[4] + "/original." + partFilename[len(partFilename)-1])
 		if err != nil {
 			h.log.Error(err)
 			return
@@ -233,7 +241,7 @@ func assembleFile(h *Handler) {
 		sort.Sort(ByChunk(fileInfos))
 		for _, fs := range fileInfos {
 			func() {
-				src, err := os.Open(path + "/" + fs.Name())
+				src, err := os.Open(fta.PathToParts + "/" + fs.Name())
 				if err != nil {
 					h.log.Error(err)
 					return
@@ -242,6 +250,6 @@ func assembleFile(h *Handler) {
 				io.Copy(dst, src)
 			}()
 		}
-		os.RemoveAll(path)
+		os.RemoveAll(fta.PathToParts)
 	}
 }
