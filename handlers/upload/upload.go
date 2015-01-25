@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"io"
 	"io/ioutil"
+	"path"
 	//	"log"
 	"net/http"
 	"os"
@@ -262,6 +263,8 @@ func assembleFile(h *Handler) {
 			}()
 		}
 		os.RemoveAll(fta.PathToParts)
+
+		assabledFilePath = path.Clean(assabledFilePath)
 
 		janitor.PushToEncode(assabledFilePath)
 	}

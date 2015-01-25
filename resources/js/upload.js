@@ -43,7 +43,7 @@ var UploadLogic = {
 
 	flow : false,
 	firstPart: true,
-	progress1: 0,
+	progress: 0,
 	timer1: false,
 	
 	init : function () {
@@ -105,10 +105,20 @@ var UploadLogic = {
 
 			console.log("fileProgress", UploadLogic.flow.progress());
 
-			if (UploadLogic.firstPart == true) {
+			if (UploadLogic.flow.progress() > 0) {
+				UploadLogic.progress = UploadLogic.flow.progress();
+			}
+
+			if (UploadLogic.progress == 0) {
+				return;
+			}
+
+			if (UploadLogic.firstPart == true && UploadLogic.progress > 0) {
 				
 
 				UploadLogic.flow.pause();
+
+				UploadLogic.firstPart = false;
 					
 
 				$.ajax({
@@ -145,7 +155,7 @@ var UploadLogic = {
 
 				});
 			}
-			else 
+			else if (UploadLogic.progress > 0)
 			{
 
 				UploadLogic.progress = UploadLogic.flow.progress() * 100;

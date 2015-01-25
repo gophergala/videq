@@ -10,22 +10,21 @@ func (m *MediaInfo) EncodeVideoFile(fileLoc string, fileName string) (err error)
 	file := fileLoc + fileName
 	m.log.Infoln(file)
 
-	var outFile string
-
-	outFile, err = m.encodeMP4(fileLoc, fileName)
+	outFileMP4, err := m.encodeMP4(fileLoc, fileName)
 	if err != nil {
 		// ako je mp4 puko kod encoding, ne mozemo nastaviti jer svi ostali zele taj file kao source
 		return err
 	}
-	outFile, err = m.encodeOGG(fileLoc, fileName)
-	outFile, err = m.encodeWEBM(fileLoc, fileName)
+	outFileOGG, err := m.encodeOGG(fileLoc, outFileMP4)
+	outFileWEBM, err := m.encodeWEBM(fileLoc, outFileMP4)
 
-	m.log.Debugf("%#v", outFile)
+	m.log.Debug("Created: ", outFileMP4, outFileOGG, outFileWEBM)
 	return nil
 }
 
+//
 // HandBrakeCLI -i _test/master_1080.mp4 -o _test/out/master_1080_2.mp4 -e x264 -q 22 -r 15 -B 64 -X 480 -O -x level=4.0:ref=9:bframes=16:b-adapt=2:direct=auto:analyse=all:8x8dct=0:me=tesa:merange=24:subme=11:trellis=2:fast-pskip=0:vbv-bufsize=25000:vbv-maxrate=20000:rc-lookahead=60
-
+//
 func (m *MediaInfo) encodeMP4(fileLoc string, fileName string) (fileNameOut string, err error) {
 	fileSource := fileLoc + fileName
 	fileNameOut = m.returnBaseFilename(fileName) + ".mp4"
@@ -43,7 +42,6 @@ func (m *MediaInfo) encodeMP4(fileLoc string, fileName string) (fileNameOut stri
 		return "", err
 	}
 
-	//m.log.Debug(out)
 	m.log.Debugf("output:(%s), err(%v)\n", string(out), err)
 
 	ok, err := m.checkIfFileExists(fileDestination)
@@ -58,8 +56,9 @@ func (m *MediaInfo) encodeMP4(fileLoc string, fileName string) (fileNameOut stri
 
 }
 
+//
 // ffmpeg2theora Master_1080.mp4 --two pass --videobitrate 900 -x 1280 -y 720
-
+//
 func (m *MediaInfo) encodeOGG(fileLoc string, fileName string) (fileNameOut string, err error) {
 	fileSource := fileLoc + fileName
 	fileNameOut = m.returnBaseFilename(fileName) + ".ogg"
@@ -87,7 +86,7 @@ func (m *MediaInfo) encodeOGG(fileLoc string, fileName string) (fileNameOut stri
 		return "", errors.New(fmt.Sprintf("File '%s' does not exists. Encoding failed?", fileDestination))
 	}
 
-	return fileDestination, nil
+	return fileNameOut, nil
 }
 
 /*
@@ -140,5 +139,5 @@ func (m *MediaInfo) encodeWEBM(fileLoc string, fileName string) (fileNameOut str
 		return "", errors.New(fmt.Sprintf("File '%s' does not exists. Encoding failed?", fileDestination))
 	}
 
-	return fileDestination, nil
+	return fileNameOut, nil
 }
