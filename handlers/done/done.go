@@ -60,12 +60,17 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		break
 
 	default:
-		dd.Procede = true
-		dd.Err = ""
-		dd.First_frame_jpg = "/download/encoded.jpg"
-		dd.Mp4_link = "/download/encoded.mp4"
-		dd.Ogv_link = "/download/encoded.ogg"
-		dd.Webm_link = "/download/encoded.webm"
+		if success.Int64 > 0 {
+			dd.Procede = true
+			dd.Err = encodingErr.String
+			dd.First_frame_jpg = "/download/encoded.jpg"
+			dd.Mp4_link = "/download/encoded.mp4"
+			dd.Ogv_link = "/download/encoded.ogg"
+			dd.Webm_link = "/download/encoded.webm"
+		} else if len(encodingErr.String) > 0 {
+			dd.Procede = false
+			dd.Err = encodingErr.String
+		}
 	}
 
 	js, err := json.Marshal(dd)
