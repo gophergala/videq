@@ -133,12 +133,13 @@ var UploadLogic = {
 				{
 					clearTimeout( UploadLogic.timer1 );
 					Msg.error(data.Err);
+					Screen.removeScreenCookie();
 				}
 
 			});
 
 
-	    }, 1000);
+	    }, 5000);
 
 
 	},

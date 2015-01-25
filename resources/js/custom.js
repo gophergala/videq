@@ -58,7 +58,7 @@ var Screen = {
 
 	addScreenCookie : function (screenName) {
 		
-		Screen.removeScreenCookie()
+		Screen.removeScreenCookie();
 
 		$.cookie('screen', screenName, { expires: 7, path: '/' });
 	},
@@ -198,6 +198,7 @@ $(function(){
 
 		e.preventDefault();
 		Screen.removeScreenCookie();
+		$.cookie('files', '', { expires: 7, path: '/' });
 
 		location.href = '';
 
