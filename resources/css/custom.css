@@ -164,6 +164,7 @@ body #main .screen{
   background-color: rgba(255, 255, 255, 0.15);
   color: rgba(255, 255, 255, 0.15);
   position: relative;
+  z-index: 1000;
 }
 
 @media screen and (min-width:921px) {

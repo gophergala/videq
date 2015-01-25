@@ -183,12 +183,12 @@ var UploadLogic = {
 		});
 
 
-		$('.trigger-browse-files').on("click", function(e){
+/*		$('.trigger-browse-files').on("click", function(e){
 			e.preventDefault();
 			$('input[type=file]').click();
 			console.log("asdasdasd");
 	    	return false;
-		});
+		});*/
 
 		$("#drop-zone").on("dragover", function(){
 			$(this).addClass("over");
