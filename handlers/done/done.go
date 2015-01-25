@@ -7,6 +7,7 @@ import (
 
 	alog "github.com/cenkalti/log"
 	"github.com/gophergala/videq/handlers/session"
+	"github.com/gophergala/videq/janitor"
 )
 
 type Handler struct {
@@ -70,6 +71,9 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		} else if len(encodingErr.String) > 0 {
 			dd.Procede = false
 			dd.Err = encodingErr.String
+			janitor.CleanupUser(sid)
+		} else {
+			dd.Procede = false
 		}
 	}
 
