@@ -7,6 +7,7 @@ import (
 	"github.com/codeskyblue/go-sh"
 	"github.com/gophergala/videq/config"
 	"os"
+	"path/filepath"
 	"strconv"
 	//	"strconv"
 	"strings"
@@ -24,27 +25,6 @@ func NewMediaInfo(log alog.Logger) *MediaInfo {
 	m.log = log
 	m.resolutions = resolutions
 	return m
-}
-
-type MediaFileInfo struct {
-	FileName        string
-	FileSize_bytes  string
-	VideoCount      int
-	AudioCount      int
-	Duration_ms     string
-	Duration        time.Duration
-	Duration_string string
-	Format          string
-	CodecID         string
-	Resolution      string
-	Width           string
-	Height          string
-	Standard        string
-	Codec           string
-	Bitrate_bps     string
-	Framerate       string
-	AspectRatio     string
-	Audio           string
 }
 
 // http://en.wikipedia.org/wiki/H.264/MPEG-4_AVC
@@ -71,6 +51,27 @@ type VideoResolution struct {
 	AspectRatio    string  `json:"aspectratio"`
 	AspectRatioInt float64 `json:"aspectratiofloat"`
 	Short          string  `json:"short"` // shorthand name for a family of video display resolutions
+}
+
+type MediaFileInfo struct {
+	FileName        string
+	FileSize_bytes  string
+	VideoCount      int
+	AudioCount      int
+	Duration_ms     string
+	Duration        time.Duration
+	Duration_string string
+	Format          string
+	CodecID         string
+	Resolution      string
+	Width           string
+	Height          string
+	Standard        string
+	Codec           string
+	Bitrate_bps     string
+	Framerate       string
+	AspectRatio     string
+	Audio           string
 }
 
 /*
@@ -245,6 +246,23 @@ func (m *MediaInfo) checkIfFileExists(fileName string) (bool, error) {
 		return false, err
 	}
 	return true, nil
+}
+
+func (m *MediaInfo) returnBaseFilename(fileName string) string {
+	// var extension = filepath.Ext(fileName)
+	// var name = fileName[0 : len(fileName)-len(extension)]
+	// return name
+
+	return strings.TrimSuffix(fileName, filepath.Ext(fileName))
+}
+
+func (m *MediaInfo) deleteFile(file string) (err error) {
+	// check if file/folder exists
+	if _, err := os.Stat(file); !os.IsNotExist(err) {
+		// vrati errror samo ako je neki zesci error, ne na file not found
+		return err
+	}
+	return nil
 }
 
 // "bytes"

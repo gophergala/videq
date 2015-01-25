@@ -65,20 +65,24 @@ func main() {
 
 	mt := mediatools.NewMediaInfo(log)
 
+	// testiranje mediainfo toola
 	// minfo, err := mt.GetMediaInfo("_test/master_1080.mp4")
 	// if err != nil {
 	// 	log.Fatal(err)
 	// }
 	// log.Infof("%#v", minfo)
 
-	ok, minfob, res, err := mt.CheckMedia("_test/master_1080.mp4") //  "test.psd" "r2w_1080p.mov" _test/master_1080.mp4" "videq_sw.mp4"
-	if err != nil {
-		log.Error(err)
-	}
-	log.Infof("%#v", ok)
-	log.Infof("%#v", minfob)
-	log.Infof("%#v", res)
-	log.Infof("%#v", err)
+	// testiranje checkera
+	// ok, minfob, res, err := mt.CheckMedia("_test/master_1080.mp4") //  "test.psd" "r2w_1080p.mov" _test/master_1080.mp4" "videq_sw.mp4"
+	// if err != nil {
+	// 	log.Error(err)
+	// }
+	// log.Infof("%#v", ok)
+	// log.Infof("%#v", minfob)
+	// log.Infof("%#v", res)
+	// log.Infof("%#v", err)
+
+	err = mt.EncodeVideoFile("_test/", "videq_sw.mp4") // "master_1080.mp4"   "r2w_1080p.mov"
 
 }
 
