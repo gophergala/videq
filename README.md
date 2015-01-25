@@ -6,7 +6,7 @@ High quality video encoding for modern web in golang
 **Project links and final notes**
    * compo submission page http://gopher-gala.challengepost.com/submissions/31979-videq
    * repo https://github.com/gophergala/videq/
-   * demo http://videq.nivas.hr
+   * demo http://videq.nivas.hr:8080/
      - limitations
        - demo is limited to max 5 min videos and 50 gb of user uploaded data
        - each user can upload only 1 video, after it is encoded or aborted, user can upload new one
