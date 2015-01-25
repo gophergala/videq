@@ -73,7 +73,7 @@ func PossibleToEncode(sid string) (bool, mediatools.MediaFileInfo, map[string]me
 }
 
 func PushToEncode(path string) {
-	sid := strings.Split(path, "/")[4] // todo - make batter
+	sid := strings.Split(path, "/")[2] // todo - make batter
 
 	_, err := DbConn.Exec("UPDATE file SET path_of_original=?, added_to_encode_queue_ts=UNIX_TIMESTAMP() WHERE sid=?", path, sid)
 	if err != nil {
@@ -87,9 +87,9 @@ func PushToEncode(path string) {
 
 func encodeWorker(pathCh <-chan string) {
 	for path := range pathCh {
-		sid := strings.Split(path, "/")[4] // todo - make batter
+		sid := strings.Split(path, "/")[2] // todo - make batter
 
-		_, err := DbConn.Exec("UPDATE file SET added_to_encode_queue_ts=UNIX_TIMESTAMP() WHERE sid=?", sid)
+		_, err := DbConn.Exec("UPDATE file SET encode_start_ts=UNIX_TIMESTAMP() WHERE sid=?", sid)
 		if err != nil {
 			log.Error(err)
 			// todo whole cleanup

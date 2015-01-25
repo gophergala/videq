@@ -105,7 +105,7 @@ var UploadLogic = {
 
 			console.log("fileProgress", UploadLogic.flow.progress());
 
-			if (UploadLogic.flow.progress() > 0.1) {
+			if (UploadLogic.flow.progress() > 0) {
 				UploadLogic.progress = UploadLogic.flow.progress();
 			}
 
@@ -117,7 +117,7 @@ var UploadLogic = {
 				
 
 				UploadLogic.flow.pause();
-				
+
 				UploadLogic.firstPart = false;
 					
 
