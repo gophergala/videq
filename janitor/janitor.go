@@ -96,7 +96,14 @@ func encodeWorker(pathCh <-chan string) {
 			return
 		}
 
+		pathSpl := strings.Split(path, "/")
+		filePath := "./" + strings.Join(pathSpl[0:len(pathSpl)-1], "/") + "/"
+		fileName := pathSpl[len(pathSpl)-1]
+		log.Debugln(path, filePath, fileName)
+
 		// call neven encode code
+		mt := mediatools.NewMediaInfo(log)
+		err = mt.EncodeVideoFile(filePath, fileName)
 	}
 }
 

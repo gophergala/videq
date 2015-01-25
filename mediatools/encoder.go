@@ -25,10 +25,16 @@ func (m *MediaInfo) EncodeVideoFile(fileLoc string, fileName string) (err error)
 //
 // HandBrakeCLI -i _test/master_1080.mp4 -o _test/out/master_1080_2.mp4 -e x264 -q 22 -r 15 -B 64 -X 480 -O -x level=4.0:ref=9:bframes=16:b-adapt=2:direct=auto:analyse=all:8x8dct=0:me=tesa:merange=24:subme=11:trellis=2:fast-pskip=0:vbv-bufsize=25000:vbv-maxrate=20000:rc-lookahead=60
 //
+/*
+alternativno UMEJESTO handbrakea
+These are the options i used to convert to a H.264/AAC .mp4 format for html5 playback (i think it may help out for other guys with this this problem in some way):
+ffmpeg -i input.flv -vcodec mpeg4 -acodec aac output.mp4
+*/
 func (m *MediaInfo) encodeMP4(fileLoc string, fileName string) (fileNameOut string, err error) {
 	fileSource := fileLoc + fileName
-	fileNameOut = m.returnBaseFilename(fileName) + ".mp4"
-	fileDestination := fileLoc + "out/" + fileNameOut
+	//fileNameOut = m.returnBaseFilename(fileName) + ".mp4"
+	fileNameOut = "encoded.mp4"
+	fileDestination := fileLoc + fileNameOut
 
 	maxWidth := "480"
 	extraParams := `level=4.0:ref=9:bframes=16:b-adapt=2:direct=auto:analyse=all:8x8dct=0:me=tesa:merange=24:subme=11:trellis=2:fast-pskip=0:vbv-bufsize=25000:vbv-maxrate=20000:rc-lookahead=60`
@@ -61,8 +67,9 @@ func (m *MediaInfo) encodeMP4(fileLoc string, fileName string) (fileNameOut stri
 //
 func (m *MediaInfo) encodeOGG(fileLoc string, fileName string) (fileNameOut string, err error) {
 	fileSource := fileLoc + fileName
-	fileNameOut = m.returnBaseFilename(fileName) + ".ogg"
-	fileDestination := fileLoc + "out/" + fileNameOut
+	// fileNameOut = m.returnBaseFilename(fileName) + ".ogg"
+	fileNameOut = "encoded.ogg"
+	fileDestination := fileLoc + fileNameOut
 
 	maxWidth := "1280"
 	maxHeight := "720"
@@ -98,8 +105,9 @@ ffmpeg -i _test/master_1080.mp4 -pass 2 -passlogfile hattrick.webm -keyint_min 0
 
 func (m *MediaInfo) encodeWEBM(fileLoc string, fileName string) (fileNameOut string, err error) {
 	fileSource := fileLoc + fileName
-	fileNameOut = m.returnBaseFilename(fileName) + ".webm"
-	fileDestination := fileLoc + "out/" + fileNameOut
+	// fileNameOut = m.returnBaseFilename(fileName) + ".webm"
+	fileNameOut = "encoded.webm"
+	fileDestination := fileLoc + fileNameOut
 
 	// out, err := sh.
 	// 	Command("ffmpeg", "-i", fileSource, "-pass", "1", "-passlogfile", fileDestination, "-keyint_min", "0", "-g", "250", "-skip_threshold", "0", "-vcodec", "libvpx", "-b", "600k", "-s", "1280x720", "-aspect", "16:9", "-an", "-y", fileDestination).

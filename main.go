@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	//	"log"
 	"net/http"
 	"os"
 	"runtime"
@@ -64,6 +63,7 @@ func main() {
 	// -------------------------------------------------------
 
 	mt := mediatools.NewMediaInfo(log)
+	_ = mt
 
 	// testiranje mediainfo toola
 	// minfo, err := mt.GetMediaInfo("_test/master_1080.mp4")
@@ -82,7 +82,7 @@ func main() {
 	// log.Infof("%#v", res)
 	// log.Infof("%#v", err)
 
-	err = mt.EncodeVideoFile("_test/", "videq_sw.mp4") // "master_1080.mp4"   "r2w_1080p.mov"
+	//err = mt.EncodeVideoFile("_test/", "videq_sw.mp4") // "master_1080.mp4"   "r2w_1080p.mov"
 
 }
 
