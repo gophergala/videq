@@ -5,7 +5,10 @@ import (
 )
 
 var execList = map[string]string{
-	"mediainfo": "sudo apt-get install mediainfo",
+	"mediainfo":     "\r\nsudo apt-get install mediainfo",
+	"HandBrakeCLI":  "\r\nsudo add-apt-repository ppa:stebbins/handbrake-releases\r\napt-get install handbrake-cli\r\n",
+	"ffmpeg":        "\r\nsudo add-apt-repository ppa:jon-severinsson/ffmpeg\r\nsudo apt-get update\r\nsudo apt-get install ffmpeg\r\nsudo apt-get install frei0r-plugins\r\n",
+	"ffmpeg2theora": "\r\nsudo apt-get install ffmpeg2theora",
 }
 
 func checkExecutables() {
