@@ -3,6 +3,7 @@ package janitor
 import (
 	"database/sql"
 	"os"
+	"strings"
 
 	alog "github.com/cenkalti/log"
 	"github.com/gophergala/videq/mediatools"
@@ -14,6 +15,7 @@ var DbConn *sql.DB
 var log alog.Logger
 
 var cleanUploadFolderCh chan string
+var encodePathCh chan string
 
 func Init(db *sql.DB, sc, si string, l alog.Logger) {
 	DbConn = db
@@ -24,6 +26,11 @@ func Init(db *sql.DB, sc, si string, l alog.Logger) {
 	cleanUploadFolderCh = make(chan string, 100)
 	for i := 0; i < 10; i++ {
 		go cleanupIncompleteFolderWorker(cleanUploadFolderCh)
+	}
+
+	encodePathCh = make(chan string, 1000000)
+	for i := 0; i < 3; i++ {
+		go encodeWorker(encodePathCh)
 	}
 }
 
@@ -43,7 +50,7 @@ func HasFileInUpload(sid string) (bool, error) {
 }
 
 func RecordFilename(sid, filename string) error {
-	_, err := DbConn.Exec("INSERT INTO file (sid, filename, start_ts) VALUES (?, ?, UNIX_TIMESTAMP())", sid, filename)
+	_, err := DbConn.Exec("REPLACE INTO file (sid, filename, start_ts) VALUES (?, ?, UNIX_TIMESTAMP())", sid, filename)
 	if err != nil {
 		return err
 	}
@@ -66,11 +73,31 @@ func PossibleToEncode(sid string) (bool, mediatools.MediaFileInfo, map[string]me
 }
 
 func PushToEncode(path string) {
+	sid := strings.Split(path, "/")[4] // todo - make batter
 
+	_, err := DbConn.Exec("UPDATE file SET path_of_original=?, added_to_encode_queue_ts=UNIX_TIMESTAMP() WHERE sid=?", path, sid)
+	if err != nil {
+		log.Error(err)
+		// todo whole cleanup
+		return
+	}
+
+	encodePathCh <- path
 }
 
-func encodeWorker() {
+func encodeWorker(pathCh <-chan string) {
+	for path := range pathCh {
+		sid := strings.Split(path, "/")[4] // todo - make batter
 
+		_, err := DbConn.Exec("UPDATE file SET added_to_encode_queue_ts=UNIX_TIMESTAMP() WHERE sid=?", sid)
+		if err != nil {
+			log.Error(err)
+			// todo whole cleanup
+			return
+		}
+
+		// call neven encode code
+	}
 }
 
 func cleanupIncompleteFolderWorker(pathCh <-chan string) {
