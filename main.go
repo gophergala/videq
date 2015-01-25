@@ -36,9 +36,6 @@ func init() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	janitor.StorageComplete = ROOT_PATH + "storage/datastore/"
-	janitor.StorageIncomplete = ROOT_PATH + "storage/.upload/"
 }
 
 func main() {
@@ -48,6 +45,8 @@ func main() {
 		log.Fatal("Error, cannot connect to db, db.OpenDB ", err)
 	}
 	defer db.CloseDB()
+
+	janitor.Init(db.conn, ROOT_PATH+"storage/datastore/", ROOT_PATH+"storage/.upload/")
 
 	webPort := flag.String("web", "", "Start web server on given port")
 	flag.Parse()

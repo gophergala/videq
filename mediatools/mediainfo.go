@@ -3,9 +3,10 @@ package mediatools
 import (
 	"errors"
 	"fmt"
+	"os"
+
 	alog "github.com/cenkalti/log"
 	"github.com/codeskyblue/go-sh"
-	"os"
 	//	"strconv"
 	"strings"
 	"time"

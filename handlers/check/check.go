@@ -52,7 +52,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// contact media check
+	//ok, mediaInfo := janitor.PossibleToEncode(sid)
 
 	outputDm := make([]VideoDimension, 0)
 	outputDm = append(outputDm, VideoDimension{"100", "200"})
@@ -73,6 +73,4 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(js)
-
-	// stao - prebacit da se sejva u SID folder usera
 }
