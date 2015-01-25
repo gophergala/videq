@@ -93,7 +93,7 @@ func encodeWorker(pathCh <-chan string) {
 		if err != nil {
 			log.Error(err)
 			// todo whole cleanup
-			return
+			continue
 		}
 
 		pathSpl := strings.Split(path, "/")
@@ -101,9 +101,29 @@ func encodeWorker(pathCh <-chan string) {
 		fileName := pathSpl[len(pathSpl)-1]
 		log.Debugln(path, filePath, fileName)
 
-		// call neven encode code
 		mt := mediatools.NewMediaInfo(log)
 		err = mt.EncodeVideoFile(filePath, fileName)
+		if err != nil {
+			log.Error(err)
+		}
+
+		encodeEnded(sid, err)
+	}
+}
+
+func encodeEnded(sid string, err error) {
+	errorTxt := ""
+	success := 1
+
+	if err != nil {
+		errorTxt = err.Error()
+		success = 0
+	}
+
+	_, err := DbConn.Exec("UPDATE file SET encode_end_ts=UNIX_TIMESTAMP(), encode_error=?, success=? WHERE sid=?", errorTxt, success, sid)
+	if err != nil {
+		log.Error(err)
+		return
 	}
 }
 

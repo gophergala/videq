@@ -30,6 +30,8 @@ CREATE TABLE `file` (
   `added_to_encode_queue_ts` int(11) DEFAULT NULL,
   `encode_start_ts` int(11) DEFAULT NULL,
   `encode_end_ts` int(11) DEFAULT NULL,
+  `encode_error` text,
+  `success` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`sid`),
   KEY `start_ts_ix` (`start_ts`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -41,6 +43,7 @@ CREATE TABLE `file` (
 
 LOCK TABLES `file` WRITE;
 /*!40000 ALTER TABLE `file` DISABLE KEYS */;
+INSERT INTO `file` VALUES ('h9h2fhfUVuS9jZ8uVbhV3vC5AWX39IVU','master_1080.mp4',1422211068,'storage/datastore/h9h2fhfUVuS9jZ8uVbhV3vC5AWX39IVU/original.mp4',1422211074,1422211074,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `file` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -77,4 +80,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-01-25 19:03:41
+-- Dump completed on 2015-01-25 20:19:52
