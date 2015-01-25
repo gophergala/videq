@@ -3,11 +3,11 @@ package mediatools
 import (
 	"errors"
 	"fmt"
-	"os"
-	"strconv"
-
 	alog "github.com/cenkalti/log"
 	"github.com/codeskyblue/go-sh"
+	"github.com/gophergala/videq/config"
+	"os"
+	"strconv"
 	//	"strconv"
 	"strings"
 	"time"
@@ -15,6 +15,7 @@ import (
 
 type MediaInfo struct {
 	log         alog.Logger
+	config      config.Config
 	resolutions map[string]VideoResolution
 }
 
@@ -46,6 +47,7 @@ type MediaFileInfo struct {
 	Audio           string
 }
 
+// http://en.wikipedia.org/wiki/H.264/MPEG-4_AVC
 // Commonly supported resolutions and aspect ratios include:
 // 854 x 480 (16:9 480p)
 // 1280 x 720 (16:9 720p)
@@ -224,6 +226,12 @@ func (m *MediaInfo) CheckMedia(fileName string) (ok bool, fileInfo MediaFileInfo
 		m.log.Infoln(fileInfo.Duration)
 		return false, fileInfo, nil, errors.New(fmt.Sprintf("File '%s' is too long. Max duration: %s, File duration: %s", fileName, maxDuration, fileInfo.Duration_string))
 	}
+
+	if fileInfo.VideoCount == 0 {
+		return false, fileInfo, nil, errors.New(fmt.Sprintf("File '%s' is no video.", fileName))
+	}
+
+	// TODO - more meaningfull checks
 
 	return true, fileInfo, m.resolutions, nil
 }

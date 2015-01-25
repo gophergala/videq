@@ -8,6 +8,7 @@ import (
 	"runtime"
 
 	_ "github.com/cenkalti/log"
+	"github.com/gophergala/videq/config"
 	"github.com/gophergala/videq/handlers/check"
 	"github.com/gophergala/videq/handlers/gzip"
 	"github.com/gophergala/videq/handlers/home"
@@ -22,13 +23,14 @@ const ROOT_PATH = "./"
 const NUM_OF_MERGE_WORKERS = 10
 const NUM_OF_MERGE_BUFFER = 100
 
+var cfg config.Config
 var db *Database
 
 func init() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
 	InitLogger()
-	LoadConfig()
+	config.LoadConfig(log, &cfg)
 	checkExecutables()
 
 	err := createStorage()
@@ -39,7 +41,7 @@ func init() {
 
 func main() {
 	var err error
-	err, db = db.OpenDB(DbConfig{config.DB.HOST, config.DB.NAME, config.DB.USER, config.DB.PASS, config.DB.DEBUG})
+	err, db = db.OpenDB(DbConfig{cfg.DB.HOST, cfg.DB.NAME, cfg.DB.USER, cfg.DB.PASS, cfg.DB.DEBUG})
 	if db == nil {
 		log.Fatal("Error, cannot connect to db, db.OpenDB ", err)
 	}
@@ -69,7 +71,7 @@ func main() {
 	// }
 	// log.Infof("%#v", minfo)
 
-	ok, minfob, res, err := mt.CheckMedia("_test/r2w_1080p.mov") // "_test/master_1080.mp4" "videq_sw.mp4"
+	ok, minfob, res, err := mt.CheckMedia("_test/master_1080.mp4") //  "test.psd" "r2w_1080p.mov" _test/master_1080.mp4" "videq_sw.mp4"
 	if err != nil {
 		log.Error(err)
 	}
