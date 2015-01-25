@@ -103,7 +103,7 @@ $(function(){
 
 
 	Video.init();
-	Screen.init('screen-setup-bar');
+	Screen.init();
 	Msg.init();
 
 	var notCompletedFiles = getFilesListFromCookie();
