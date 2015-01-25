@@ -182,7 +182,7 @@ var UploadLogic = {
 
 		    	Screen.show('screen-download-bar');
 
-		    }, 5000);
+		    }, 2000);
 
 		});
 		
@@ -203,7 +203,6 @@ var UploadLogic = {
 		$('.trigger-browse-files').on("click", function(e){
 			e.preventDefault();
 			$('input[type=file]').click();
-			console.log("asdasdasd");
 	    	return false;
 		});
 
@@ -226,8 +225,7 @@ var UploadLogic = {
 		$("form#output_data").on("submit", function(e){
 			
 			e.preventDefault();
-			
-			console.log("setup", UploadLogic.flow);
+		
 
 			setTimeout(function(){
 

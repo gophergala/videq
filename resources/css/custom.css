@@ -344,13 +344,16 @@ body .screen.screen-download-bar #html_code{
   display: block;
   background-color: rgba(255, 255, 255, 0.2);
   color: rgba(255, 255, 255, 0.5);
-  padding: 10px 50px 10px 50px;
+  padding: 0px;
   cursor: pointer;
   cursor: hand;
   border: none;
   outline: none; 
   font-size: 18px;
   width: 100%;
+  overflow: hidden;
+  height: 1.8em;
+  line-height: 1.8em;
 }
 
 
