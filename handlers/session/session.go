@@ -28,7 +28,7 @@ type Handler struct {
 	db         *sql.DB
 }
 
-func NewHandler(log alog.Logger, db *sql.DB, passHandler http.Handler, dsn string) *Handler {
+func NewHandler(log alog.Logger, db *sql.DB, passHandler http.Handler) *Handler {
 	h := new(Handler)
 	h.passHandle = passHandler
 	h.log = log
