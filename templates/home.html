@@ -102,9 +102,66 @@
 
                     <div class="txt">
 
-                        <p>Select your video size: </p>
+                       
                         
                         <form method="POST" id="output_data">
+                            
+                            <div class="row">
+                                
+                                <div class="col-md-8">
+                                    
+                                    <p>Select your video size: </p>
+
+                                    <ul class="sizes">
+                                        <li>
+                                            <label>
+                                            <div><img src="/resources/img/size_small.png" ></div>
+                                            <div>480p (854x480)</div>
+                                            <div><input type="radio" name="output_size" value="1" ></div>
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                            <div><img src="/resources/img/size_medium.png" ></div>
+                                            <div>720p (1280x720)</div>
+                                            <div><input type="radio" name="output_size" value="1" ></div>
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                            <div><img src="/resources/img/size_small.png" ></div>
+                                            <div>1080p (1920x1080)</div>
+                                            <div><input type="radio" name="output_size" value="1" ></div>
+                                            </label>
+                                        </li>
+                                    </ul>
+
+                                </div>
+                                <div class="col-md-4">
+                                    
+                                        
+                                    <p>Output options: </p>
+                                    <div>
+                                    <label>
+                                        Leave Audio:
+                                        <div><input id="leave_audio" name="leave_audio" type="checkbox" checked data-size="normal" class="bswitch" data-on-text="Yes" data-off-text="No"></div>
+                                    </label>
+                                    </div>
+
+                                    <br>
+
+                                    <div>
+                                    <label>
+                                        HTML code:
+                                        <div><input id="generate_html" name="generate_html" type="checkbox" checked data-size="normal" class="bswitch" data-on-text="Yes" data-off-text="No"></div>
+                                    </label>
+                                    </div>
+
+                                    
+                                </div>
+
+                            </div>
+                            
 
                             <label> Video width:
                             <input name="output_width" type="text" value="1920">
@@ -232,14 +289,12 @@
                     <div class="form-group">
                       <label for="generate_html">Give me HTML code</label>
                       <br>
-                      <input id="generate_html" name="generate_html" type="checkbox" checked data-size="normal" class="bswitch" data-on-text="Yes" data-off-text="No">
                     </div>
 
 
                     <div class="form-group">
                       <label for="leave_audio">Leave audio</label>
                       <br>
-                      <input id="leave_audio" name="leave_audio" type="checkbox" checked data-size="normal" class="bswitch" data-on-text="Yes" data-off-text="No">
                     </div>
 
 

@@ -43,6 +43,8 @@ var UploadLogic = {
 
 	flow : false,
 	firstPart: true,
+	progress1: 0,
+	timer1: false,
 	
 	init : function () {
 
@@ -101,11 +103,13 @@ var UploadLogic = {
 
 		UploadLogic.flow.on('fileProgress', function () {
 
-			console.log("fileProgress");
+			console.log("fileProgress", UploadLogic.flow.progress());
 
 			if (UploadLogic.firstPart == true) {
 				
+
 				UploadLogic.flow.pause();
+					
 
 				$.ajax({
 					url: "/check/",
@@ -144,11 +148,17 @@ var UploadLogic = {
 			else 
 			{
 
-				var progress = UploadLogic.flow.progress() * 100;
-				console.log("progress %:", UploadLogic.flow.progress(), progress);
-				if (progress < 100) {
-					$('.progress-bar').css('width', progress + '%');
-				}
+				UploadLogic.progress = UploadLogic.flow.progress() * 100;
+	
+				UploadLogic.timer1 = setInterval(function(){
+
+					if ( UploadLogic.progress < 100) 
+					{
+						console.log("progress", Math.round(UploadLogic.progress));
+						$('.progress-bar').css('width', Math.round(UploadLogic.progress) + '%');
+					}
+
+				},500);
 
 			}
 		});
@@ -173,8 +183,10 @@ var UploadLogic = {
 		});
 
 
-		$('.trigger-browse-files').on("click", function(ev){
+		$('.trigger-browse-files').on("click", function(e){
+			e.preventDefault();
 			$('input[type=file]').click();
+			console.log("asdasdasd");
 	    	return false;
 		});
 
@@ -217,8 +229,6 @@ var UploadLogic = {
 			}).done(function(data) {
 				
 				console.log(data);
-
-
 
 			});
 

@@ -163,8 +163,6 @@ body #main .screen{
   text-align: center;
   background-color: rgba(255, 255, 255, 0.15);
   color: rgba(255, 255, 255, 0.15);
-  cursor: pointer;
-  cursor: hand;
   position: relative;
 }
 
@@ -199,6 +197,8 @@ body #main .screen{
 /* ------------------------------------------------------------------------------------------------ */
 body .screen.screen-drop-zone{
     z-index: 1001;
+    cursor: pointer;
+    cursor: hand;    
 }
 
 body .screen.screen-drop-zone .txt{
@@ -285,15 +285,48 @@ body .screen.screen-error-bar .imoon{
 /* Setup bar
 /* ------------------------------------------------------------------------------------------------ */
 body .screen.screen-setup-bar .inner{
-    width: 600px !important;
-    margin-left: auto;
-    margin-right: auto;
+  text-align: left;
 }
 
 body .screen.screen-setup-bar .txt{
     padding-top: 40px; 
     padding-bottom: 40px; 
 }
+
+
+body .screen.screen-setup-bar ul.sizes{
+  display: block;
+  list-style-type: none;
+}
+
+body .screen.screen-setup-bar ul.sizes li{
+  float: left;
+  display: block;
+  border: 1px solid rgba(255,255,255,0.2);
+  -webkit-border-radius: 5px 5px 5px 5px;
+  border-radius: 5px 5px 5px 5px;  
+  margin-right: 20px;
+  padding: 30px;
+  color: #fff;
+  text-align: center
+}
+
+body .screen.screen-setup-bar ul.sizes li input[type=radio]{
+    width: 1.5em;
+    height: 1.5em;
+}
+
+body .screen.screen-setup-bar label{
+  cursor: pointer;
+  cursor: hand;
+  color: #fff;
+}
+
+body .screen.screen-setup-bar .bootstrap-switch-handle-on{
+  background-color: #0fc95e;
+}
+
+
 
 
 /* ------------------------------------------------------------------------------------------------ */
