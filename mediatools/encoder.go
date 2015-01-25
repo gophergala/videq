@@ -18,7 +18,9 @@ func (m *MediaInfo) EncodeVideoFile(fileLoc string, fileName string) (err error)
 	outFileOGG, err := m.encodeOGG(fileLoc, outFileMP4)
 	outFileWEBM, err := m.encodeWEBM(fileLoc, outFileMP4)
 
-	m.log.Debug("Created: ", outFileMP4, outFileOGG, outFileWEBM)
+	outFileJPG, err := m.generateThumbnailJPG(fileLoc, outFileMP4)
+
+	m.log.Debug("Created: ", outFileMP4, outFileOGG, outFileWEBM, outFileJPG)
 	return nil
 }
 
@@ -129,6 +131,38 @@ func (m *MediaInfo) encodeWEBM(fileLoc string, fileName string) (fileNameOut str
 		Command("ffmpeg", "-i", fileSource, "-pass", "2", "-passlogfile", fileDestination, "-keyint_min", "0", "-g", "250", "-skip_threshold", "0", "-vcodec", "libvpx", "-b", "600k", "-s", "1280x720", "-aspect", "16:9", "-acodec", "libvorbis", "-y", fileDestination).
 		Output()
 
+	if err == sh.ErrExecTimeout {
+		m.log.Errorf("shell exec timeouteded.", err)
+	}
+	if err != nil {
+		m.log.Errorf("sh.Command error:", err)
+		return "", err
+	}
+
+	//m.log.Debug(out)
+	m.log.Debugf("output:(%s), err(%v)\n", string(out), err)
+	ok, err := m.checkIfFileExists(fileDestination)
+	if err != nil {
+		return "", err
+	}
+	if ok == false {
+		return "", errors.New(fmt.Sprintf("File '%s' does not exists. Encoding failed?", fileDestination))
+	}
+
+	return fileNameOut, nil
+}
+
+// https://trac.ffmpeg.org/wiki/Create%20a%20thumbnail%20image%20every%20X%20seconds%20of%20the%20video
+// ffmpeg -i master_1080.mp4 -t 0.001 -ss 7 -vframes 1 -y -f mjpeg master_test.jpg
+// ffmpeg -i input.flv -ss 00:00:14.435 -f image2 -vframes 1 out.png
+
+func (m *MediaInfo) generateThumbnailJPG(fileLoc string, fileName string) (fileNameOut string, err error) {
+	fileSource := fileLoc + fileName
+	// fileNameOut = m.returnBaseFilename(fileName) + ".webm"
+	fileNameOut = "encoded.jpg"
+	fileDestination := fileLoc + fileNameOut
+
+	out, err := sh.Command("ffmpeg", "-i", fileSource, "-t", "0.001", "-ss", "7", "-vframes", "1", "-y", "-f", "mjpeg", fileDestination).Output()
 	if err == sh.ErrExecTimeout {
 		m.log.Errorf("shell exec timeouteded.", err)
 	}
