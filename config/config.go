@@ -9,9 +9,9 @@ import (
 
 // Config structure that holds Config data
 type Config struct {
-	FILES struct {
-		TEMPLATES string
-	}
+	// FILES struct {
+	// 	TEMPLATES string
+	// }
 
 	DB struct {
 		HOST  string
