@@ -1,9 +1,13 @@
 package janitor
 
-import "os"
+import (
+	"database/sql"
+	"os"
+)
 
 var StorageIncomplete string
 var StorageComplete string
+var DbConn *sql.DB
 
 // check if current user is uploading a file?
 func HasFileInUpload(sid string) (bool, error) {
@@ -18,4 +22,12 @@ func HasFileInUpload(sid string) (bool, error) {
 	}
 
 	return true, nil
+}
+
+func RecordFilename(sid, filename string) error {
+	_, err := DbConn.Exec("INSERT INTO file (sid, filename, start_ts) VALUES (?, ?, UNIX_TIMESTAMP())", sid, filename)
+	if err != nil {
+		return err
+	}
+	return nil
 }

@@ -48,6 +48,8 @@ func main() {
 	}
 	defer db.CloseDB()
 
+	janitor.DbConn = db.conn
+
 	webPort := flag.String("web", "", "Start web server on given port")
 	flag.Parse()
 

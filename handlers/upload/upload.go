@@ -5,12 +5,15 @@ import (
 	"io"
 	"io/ioutil"
 	//	"log"
-	alog "github.com/cenkalti/log"
 	"net/http"
 	"os"
 	"sort"
 	"strconv"
 	"strings"
+
+	alog "github.com/cenkalti/log"
+	"github.com/gophergala/videq/handlers/session"
+	"github.com/gophergala/videq/janitor"
 )
 
 type Handler struct {
@@ -48,26 +51,43 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) checkPart(w http.ResponseWriter, r *http.Request) {
-	chunkDirPath := h.rootPath + "/storage/.upload/" + r.FormValue("flowFilename") + "/" + r.FormValue("flowChunkNumber")
+	sid, err := session.Sid(r)
+	if err != nil {
+		h.log.Error(err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	chunkDirPath := h.rootPath + "storage/.upload/" + sid + "/" + r.FormValue("flowChunkNumber")
 
 	stat, err := os.Stat(chunkDirPath)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusNoContent)
+		h.log.Info(err)
+		http.Error(w, "Internal server error", http.StatusNoContent)
 		return
 	}
 
 	expectedChunkSize, err := strconv.Atoi(r.URL.Query().Get("flowCurrentChunkSize"))
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		h.log.Info(err)
+		http.Error(w, "Internal server error", http.StatusBadRequest)
 		return
 	}
 	if int(stat.Size()) != expectedChunkSize {
+		h.log.Info(err)
 		http.Error(w, "Chunk size check failed", http.StatusPartialContent)
 		return
 	}
 }
 
 func (h *Handler) streamUpload(w http.ResponseWriter, r *http.Request) {
+	sid, err := session.Sid(r)
+	if err != nil {
+		h.log.Error(err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+
 	buf := new(bytes.Buffer)
 	reader, err := r.MultipartReader()
 	// Part 1: Chunk Number
@@ -76,13 +96,15 @@ func (h *Handler) streamUpload(w http.ResponseWriter, r *http.Request) {
 	// Part 8: Total Chunks
 	// Part 9: Chunk Data
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		h.log.Error(err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
 	}
 
 	part, err := reader.NextPart() // 1
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		h.log.Error(err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
 	}
 	io.Copy(buf, part)
@@ -93,7 +115,8 @@ func (h *Handler) streamUpload(w http.ResponseWriter, r *http.Request) {
 		// move through unused parts
 		part, err = reader.NextPart()
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			h.log.Error(err)
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
 			return
 		}
 	}
@@ -106,34 +129,47 @@ func (h *Handler) streamUpload(w http.ResponseWriter, r *http.Request) {
 		// move through unused parts
 		part, err = reader.NextPart()
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			h.log.Error(err)
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
 			return
 		}
 	}
 
-	io.Copy(buf, part)
-	fileName := buf.String()
-	buf.Reset()
+	if chunkNo == "1" {
+		io.Copy(buf, part)
+		fileName := buf.String()
+		buf.Reset()
+
+		err = janitor.RecordFilename(sid, fileName)
+		if err != nil {
+			h.log.Error(err)
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			return
+		}
+	}
 
 	for i := 0; i < 3; i++ { // 7 8 9
 		// move through unused parts
 		part, err = reader.NextPart()
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			h.log.Error(err)
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
 			return
 		}
 	}
 
-	chunkDirPath := h.rootPath + "/storage/.upload/" + fileName
+	chunkDirPath := h.rootPath + "/storage/.upload/" + sid
 	err = os.MkdirAll(chunkDirPath, 02750)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		h.log.Error(err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
 	}
 
 	dst, err := os.Create(chunkDirPath + "/" + chunkNo)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		h.log.Error(err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
 	}
 	defer dst.Close()
@@ -141,14 +177,16 @@ func (h *Handler) streamUpload(w http.ResponseWriter, r *http.Request) {
 
 	fileInfos, err := ioutil.ReadDir(chunkDirPath)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		h.log.Error(err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
 	}
 
 	currentSize := totalSize(fileInfos)
 	flowTotalSizeInt64, err := strconv.ParseInt(flowTotalSize, 10, 64)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		h.log.Error(err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
 	}
 
@@ -185,7 +223,7 @@ func assembleFile(h *Handler) {
 		}
 
 		// create final file to write to
-		dst, err := os.Create(h.rootPath + "/storage/datastore/" + strings.Split(path, "/")[4])
+		dst, err := os.Create(h.rootPath + "storage/datastore/" + strings.Split(path, "/")[4] + "/original")
 		if err != nil {
 			h.log.Error(err)
 			return

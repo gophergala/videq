@@ -18,7 +18,7 @@ func Sid(r *http.Request) (string, error) {
 		return "", err
 	}
 
-	return sid.String(), nil
+	return sid.Value, nil
 }
 
 type Handler struct {
