@@ -60,11 +60,21 @@ func main() {
 	log.Infoln("Non server mode active")
 
 	mt := mediatools.NewMediaInfo(log)
-	minfo, err := mt.GetMediaInfo("_test/master_1080.mp4")
+
+	// minfo, err := mt.GetMediaInfo("_test/master_1080.mp4")
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// log.Infof("%#v", minfo)
+
+	ok, minfob, err := mt.CheckMedia("_test/videq_sw.mp4") // "_test/master_1080.mp4"
 	if err != nil {
-		log.Fatal(err)
+		log.Error(err)
 	}
-	log.Infof("%#v", minfo)
+	log.Infof("%#v", ok)
+	log.Infof("%#v", minfob)
+	log.Infof("%#v", err)
+
 }
 
 func webServer(db *Database, port string) {

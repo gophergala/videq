@@ -5,6 +5,7 @@ import "os"
 var StorageIncomplete string
 var StorageComplete string
 
+// check if current user is uploading a file?
 func HasFileInUpload(sid string) (bool, error) {
 	firstPartFilename := StorageIncomplete + "/" + sid + "/1"
 

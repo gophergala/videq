@@ -1,8 +1,12 @@
 package mediatools
 
 import (
+	"errors"
+	"fmt"
 	alog "github.com/cenkalti/log"
 	"github.com/codeskyblue/go-sh"
+	"os"
+	//	"strconv"
 	"strings"
 	"time"
 )
@@ -23,6 +27,7 @@ type MediaFileInfo struct {
 	VideoCount     string
 	AudioCount     string
 	Duration_ms    string
+	Duration       time.Duration
 	Format         string
 	CodecID        string
 	Resolution     string
@@ -55,8 +60,17 @@ AspectRatio: 2.35:1
 Audio: English 128 Kbps CBR 2 chnls AAC LC
 */
 
-// fetched media info
-func (m *MediaInfo) GetMediaInfo(fileName string) (output string, err error) {
+/*
+fetches media info
+usage:
+mt := mediatools.NewMediaInfo(log)
+minfo, err := mt.GetMediaInfo("_test/master_1080.mp4")
+if err != nil {
+	log.Fatal(err)
+}
+log.Infof("%#v", minfo)
+*/
+func (m *MediaInfo) GetMediaInfo(fileName string) (fileInfo MediaFileInfo, err error) {
 
 	// timeout should be a session
 	//	out, err := sh.Command("ping", "-t", "127.0.0.1").SetTimeout(time.Second * 60).Output()
@@ -76,20 +90,15 @@ Text_End;.\r\n
 	}
 	if err != nil {
 		m.log.Errorf("sh.Command error:", err)
-		return "", err
+		return fileInfo, err
 	}
 
 	//output = strings.Replace(string(out), "\n", "<br>", -1)
 
 	lines := strings.Split(string(out), "\n")
-	//m.log.Infof("%s", len(lines))
-	//m.log.Infof("%#v", lines)
-	// m.log.Info("%#v", len(lines))
-
-	fileInfo := new(MediaFileInfo)
+	//fileInfo := new(MediaFileInfo)
 
 	for _, line := range lines {
-		//m.log.Infoln(line)
 		paramArr := strings.Split(line, "::")
 		if len(paramArr) != 2 {
 			continue
@@ -97,11 +106,6 @@ Text_End;.\r\n
 
 		paramName := strings.Trim(paramArr[0], " ")
 		paramValue := strings.Trim(paramArr[1], " ")
-
-		m.log.Infoln(len(paramArr), paramName, paramValue)
-		// if paramArr[0] == "FileName" {
-		// 	fileInfo.FileName = strings.Trim(paramArr[1], " ")
-		// }
 
 		switch paramName {
 		case `FileName`:
@@ -114,6 +118,13 @@ Text_End;.\r\n
 			fileInfo.AudioCount = paramValue
 		case `Duration_ms`:
 			fileInfo.Duration_ms = paramValue
+			// durationDurationInt64, err := strconv.ParseInt(fileInfo.Duration_ms, 10, 64)
+			// fileInfo.Duration = time.Millisecond * durationDurationInt64 / 100
+			dur, err := time.ParseDuration(paramValue + "ms")
+			if err == nil {
+				fileInfo.Duration = dur
+				m.log.Debug(dur)
+			}
 		case `Format`:
 			fileInfo.Format = paramValue
 		case `CodecID`:
@@ -124,7 +135,6 @@ Text_End;.\r\n
 			fileInfo.Width = paramValue
 		case `Height`:
 			fileInfo.Height = paramValue
-
 		case `Standard`:
 			fileInfo.Standard = paramValue
 		case `Codec`:
@@ -137,11 +147,39 @@ Text_End;.\r\n
 			fileInfo.AspectRatio = paramValue
 		case `Audio`:
 			fileInfo.Audio = paramValue
-
 		}
 	}
 
-	m.log.Infof("%#v", fileInfo)
+	return fileInfo, nil
+}
 
-	return output, nil
+func (m *MediaInfo) CheckMedia(fileName string) (ok bool, fileInfo MediaFileInfo, err error) {
+
+	exists, err := m.checkIfFileExists(fileName)
+	if err != nil {
+		return false, fileInfo, err
+	}
+	if exists == false {
+		return false, fileInfo, errors.New(fmt.Sprintf("File '%s' does not exists.", fileName))
+	}
+
+	fileInfo, err = m.GetMediaInfo(fileName)
+	if err != nil {
+		m.log.Error(err)
+		return false, fileInfo, err
+	}
+	//	m.log.Infof("%#v", fileInfo)
+
+	return true, fileInfo, nil
+}
+
+func (m *MediaInfo) checkIfFileExists(fileName string) (bool, error) {
+	_, err := os.Stat(fileName)
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+	if err != nil {
+		return false, err
+	}
+	return true, nil
 }
