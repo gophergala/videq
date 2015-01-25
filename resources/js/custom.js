@@ -149,6 +149,11 @@ $(function(){
 			if(default_screen=="screen-converting-bar")
 			{
 				UploadLogic.isDone();
+			}			
+
+			if(default_screen=="screen-download-bar")
+			{
+				UploadLogic.isDone();
 			}
 
 			Screen.init(default_screen);
@@ -195,6 +200,14 @@ $(function(){
 		Screen.removeScreenCookie();
 
 		location.href = '';
+
+/*		$.ajax({
+			url: "/restart/",
+			dataType: "json"
+		}).done(function(data){
+			
+
+		});*/
 
 	});
 

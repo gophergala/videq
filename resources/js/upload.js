@@ -90,6 +90,8 @@ var UploadLogic = {
 					if(data.first_frame_jpg!==undefined)
 					{
 						html_code_str += '<video autoplay loop poster="'+ data.first_frame_jpg +'">';
+
+						$("#jpg_link").attr("href", data.first_frame_jpg);
 					}
 					else
 					{
@@ -119,6 +121,7 @@ var UploadLogic = {
 
 					html_code_str += '</video>';
 
+
 					$("#html_code").html(html_code_str);
 
 					Screen.show('screen-download-bar');
@@ -128,7 +131,7 @@ var UploadLogic = {
 				{
 
 					clearTimeout( UploadLogic.timer1 );
-					
+
 					Msg.error(data.Err);
 				}
 
