@@ -10,6 +10,7 @@ import (
 	"github.com/gophergala/videq/config"
 	"github.com/gophergala/videq/handlers/check"
 	"github.com/gophergala/videq/handlers/done"
+	"github.com/gophergala/videq/handlers/download"
 	"github.com/gophergala/videq/handlers/gzip"
 	"github.com/gophergala/videq/handlers/home"
 	"github.com/gophergala/videq/handlers/session"
@@ -104,6 +105,9 @@ func webServer(db *Database, port string) {
 
 	doneHandler := done.NewHandler(log, ROOT_PATH, db.conn)
 	http.Handle("/done/", doneHandler)
+
+	downloadHandler := download.NewHandler(log, ROOT_PATH)
+	http.Handle("/download/", downloadHandler)
 
 	log.Infof("Server started on port %v", port)
 	log.Info(http.ListenAndServe(":"+port, nil))
