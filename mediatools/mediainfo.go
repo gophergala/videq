@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"strconv"
 
 	alog "github.com/cenkalti/log"
 	"github.com/codeskyblue/go-sh"
@@ -13,20 +14,22 @@ import (
 )
 
 type MediaInfo struct {
-	log alog.Logger
+	log         alog.Logger
+	resolutions map[string]VideoResolution
 }
 
 func NewMediaInfo(log alog.Logger) *MediaInfo {
 	m := new(MediaInfo)
 	m.log = log
+	m.resolutions = resolutions
 	return m
 }
 
 type MediaFileInfo struct {
 	FileName       string
 	FileSize_bytes string
-	VideoCount     string
-	AudioCount     string
+	VideoCount     int
+	AudioCount     int
 	Duration_ms    string
 	Duration       time.Duration
 	Format         string
@@ -50,21 +53,21 @@ type MediaFileInfo struct {
 // 1280 x 1024 (5:4)
 // 1920 x 1440 (4:3)
 
-var Resolutions = map[string]VideoResolution{
-	"854 x 480 (16:9 480p)":    {Width: 854, Height: 480, AspectRatio: "16:9", AspectRatioInt: 16 / 9, Short: "480p"},
-	"1280 x 720 (16:9 720p)":   {Width: 1280, Height: 720, AspectRatio: "16:9", AspectRatioInt: 16 / 9, Short: "720p"},
-	"1920 x 1080 (16:9 1080p)": {Width: 1920, Height: 1080, AspectRatio: "16:9", AspectRatioInt: 16 / 9, Short: "1080p"},
-	"640 x 480 (4:3 480p)":     {Width: 640, Height: 480, AspectRatio: "4:3", AspectRatioInt: 4 / 3, Short: "480p"},
-	"1280 x 1024 (5:4)":        {Width: 1280, Height: 1024, AspectRatio: "5:4", AspectRatioInt: 4 / 3, Short: ""},
-	"1920 x 1440 (4:3)":        {Width: 1920, Height: 1440, AspectRatio: "4:3", AspectRatioInt: 4 / 3, Short: ""},
+var resolutions = map[string]VideoResolution{
+	"854 x 480 (16:9 480p)":    {Width: 854, Height: 480, AspectRatio: "16:9", AspectRatioInt: float64(16) / float64(9), Short: "480p"},
+	"1280 x 720 (16:9 720p)":   {Width: 1280, Height: 720, AspectRatio: "16:9", AspectRatioInt: float64(16) / float64(9), Short: "720p"},
+	"1920 x 1080 (16:9 1080p)": {Width: 1920, Height: 1080, AspectRatio: "16:9", AspectRatioInt: float64(16) / float64(9), Short: "1080p"},
+	"640 x 480 (4:3 480p)":     {Width: 640, Height: 480, AspectRatio: "4:3", AspectRatioInt: float64(4) / float64(3), Short: "480p"},
+	"1280 x 1024 (5:4)":        {Width: 1280, Height: 1024, AspectRatio: "5:4", AspectRatioInt: float64(4) / float64(3), Short: ""},
+	"1920 x 1440 (4:3)":        {Width: 1920, Height: 1440, AspectRatio: "4:3", AspectRatioInt: float64(4) / float64(3), Short: ""},
 }
 
 type VideoResolution struct {
-	Width          int    `json:"width"`
-	Height         int    `json:"height"`
-	AspectRatio    string `json:"aspectratio"`
-	AspectRatioInt int    `json:"aspectratioint"`
-	Short          string `json:"aspectratio"` // shorthand name for a family of video display resolutions
+	Width          int     `json:"width"`
+	Height         int     `json:"height"`
+	AspectRatio    string  `json:"aspectratio"`
+	AspectRatioInt float64 `json:"aspectratiofloat"`
+	Short          string  `json:"short"` // shorthand name for a family of video display resolutions
 }
 
 /*
@@ -139,9 +142,20 @@ Text_End;.\r\n
 		case `FileSize_bytes`:
 			fileInfo.FileSize_bytes = paramValue
 		case `VideoCount`:
-			fileInfo.VideoCount = paramValue
+			val, err := strconv.ParseInt(paramValue, 10, 0) // int
+			if err == nil {
+				fileInfo.VideoCount = int(val)
+			} else {
+				fileInfo.VideoCount = 0
+			}
 		case `AudioCount`:
-			fileInfo.AudioCount = paramValue
+			val, err := strconv.ParseInt(paramValue, 10, 0) // int
+			if err == nil {
+				fileInfo.AudioCount = int(val)
+			} else {
+				fileInfo.AudioCount = 0
+			}
+
 		case `Duration_ms`:
 			fileInfo.Duration_ms = paramValue
 			// durationDurationInt64, err := strconv.ParseInt(fileInfo.Duration_ms, 10, 64)
@@ -179,24 +193,24 @@ Text_End;.\r\n
 	return fileInfo, nil
 }
 
-func (m *MediaInfo) CheckMedia(fileName string) (ok bool, fileInfo MediaFileInfo, err error) {
+func (m *MediaInfo) CheckMedia(fileName string) (ok bool, fileInfo MediaFileInfo, res map[string]VideoResolution, err error) {
+	res = m.resolutions
 
 	exists, err := m.checkIfFileExists(fileName)
 	if err != nil {
-		return false, fileInfo, err
+		return false, fileInfo, nil, err
 	}
 	if exists == false {
-		return false, fileInfo, errors.New(fmt.Sprintf("File '%s' does not exists.", fileName))
+		return false, fileInfo, nil, errors.New(fmt.Sprintf("File '%s' does not exists.", fileName))
 	}
 
 	fileInfo, err = m.GetMediaInfo(fileName)
 	if err != nil {
 		m.log.Error(err)
-		return false, fileInfo, err
+		return false, fileInfo, nil, err
 	}
-	//	m.log.Infof("%#v", fileInfo)
 
-	return true, fileInfo, nil
+	return true, fileInfo, m.resolutions, nil
 }
 
 func (m *MediaInfo) checkIfFileExists(fileName string) (bool, error) {
@@ -209,3 +223,15 @@ func (m *MediaInfo) checkIfFileExists(fileName string) (bool, error) {
 	}
 	return true, nil
 }
+
+// "bytes"
+// "encoding/json"
+
+// m.log.Debug(m.resolutions)
+// b, err := json.Marshal(m.resolutions)
+// if err != nil {
+// 	m.log.Fatal(err)
+// }
+// var out bytes.Buffer
+// json.Indent(&out, b, "=", "\t")
+// out.WriteTo(os.Stdout)

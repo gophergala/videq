@@ -55,7 +55,8 @@ func PossibleToEncode(sid string) (bool, mediatools.MediaFileInfo, error) {
 
 	userFolder := StorageIncomplete + sid
 
-	ok, minfob, err := mt.CheckMedia(userFolder + "/1")
+	ok, minfob, resolutions, err := mt.CheckMedia(userFolder + "/1")
+	_ = resolutions
 	if err != nil {
 		log.Error(err)
 		cleanUploadFolderCh <- userFolder

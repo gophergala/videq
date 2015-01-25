@@ -65,12 +65,13 @@ func main() {
 	// }
 	// log.Infof("%#v", minfo)
 
-	ok, minfob, err := mt.CheckMedia("_test/videq_sw.mp4") // "_test/master_1080.mp4"
+	ok, minfob, res, err := mt.CheckMedia("_test/videq_sw.mp4") // "_test/master_1080.mp4"
 	if err != nil {
 		log.Error(err)
 	}
 	log.Infof("%#v", ok)
 	log.Infof("%#v", minfob)
+	log.Infof("%#v", res)
 	log.Infof("%#v", err)
 
 }
@@ -92,6 +93,7 @@ func webServer(db *Database, port string) {
 
 	log.Infof("Server started on port %v", port)
 	log.Info(http.ListenAndServe(":"+port, nil))
+
 }
 
 func createStorage() error {
