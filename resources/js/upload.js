@@ -73,6 +73,16 @@ var UploadLogic = {
 	    UploadLogic.timer1 = setInterval(function(){
 
 
+	    	UploadLogic.atDone();
+
+
+	    }, 5000);
+
+
+	},
+
+	atDone : function() {
+
 			$.ajax({
 				url: "/done/",
 				dataType: "json",
@@ -137,10 +147,6 @@ var UploadLogic = {
 				}
 
 			});
-
-
-	    }, 5000);
-
 
 	},
 

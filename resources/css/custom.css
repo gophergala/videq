@@ -178,6 +178,7 @@ body #main .screen{
   color: rgba(255, 255, 255, 0.15);
   position: relative;
   z-index: 1000;
+  display: none;
 }
 
 body .cta.cta1{

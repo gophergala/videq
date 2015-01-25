@@ -33,14 +33,11 @@ var Video = {
 var Screen = {
 
 	active : false,
+	first: 'screen-drop-zone',
 
 	init : function () {
 
-
-		var first = 'screen-drop-zone';
 		var showFirst = true;
-		var checkFreeSpace = false;
-
 
 		var cookie_screen = Screen.getScreentFromCookie();
 		if(cookie_screen!==undefined && cookie_screen!="")
@@ -63,19 +60,15 @@ var Screen = {
 			{
 				showFirst = false;
 				Screen.show(cookie_screen);
+				UploadLogic.atDone();
 			}
 
+			if(showFirst) Screen.show(Screen.first);
+
+			return;
 		}
 
-
-		if(checkFreeSpace)
-		{
-			$(document).trigger("freespace");
-		} 
-		else
-		{
-			if(showFirst) Screen.show(first);
-		}
+		$(document).trigger("freespace");
 	},
 
 	show : function (name) {
@@ -175,11 +168,6 @@ var Msg = {
 $(function(){
 
 
-	Video.init();
-	Screen.init();
-	Msg.init();
-
-
 
 
 
@@ -227,6 +215,8 @@ $(function(){
 
 	$( document ).on( "freespace", {}, function(e) {
 
+		Screen.show(Screen.first);
+
 		$.ajax({
 			url: "/free/",
 			dataType: "json"
@@ -238,9 +228,15 @@ $(function(){
 				Msg.error("There was an system error. Please try again later.");
 			}
 
+
 		});
 
 	});
+
+
+	Video.init();
+	Screen.init();
+	Msg.init();
 
 
 });
