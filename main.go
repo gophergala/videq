@@ -9,6 +9,7 @@ import (
 	_ "github.com/cenkalti/log"
 	"github.com/gophergala/videq/config"
 	"github.com/gophergala/videq/handlers/check"
+	"github.com/gophergala/videq/handlers/done"
 	"github.com/gophergala/videq/handlers/gzip"
 	"github.com/gophergala/videq/handlers/home"
 	"github.com/gophergala/videq/handlers/session"
@@ -100,6 +101,9 @@ func webServer(db *Database, port string) {
 
 	checkHandler := check.NewHandler(log, ROOT_PATH)
 	http.Handle("/check/", checkHandler)
+
+	doneHandler := done.NewHandler(log, ROOT_PATH, db.conn)
+	http.Handle("/done/", doneHandler)
 
 	log.Infof("Server started on port %v", port)
 	log.Info(http.ListenAndServe(":"+port, nil))
