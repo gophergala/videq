@@ -11,6 +11,7 @@ import (
 	"github.com/gophergala/videq/handlers/check"
 	"github.com/gophergala/videq/handlers/done"
 	"github.com/gophergala/videq/handlers/download"
+	"github.com/gophergala/videq/handlers/free"
 	"github.com/gophergala/videq/handlers/gzip"
 	"github.com/gophergala/videq/handlers/home"
 	"github.com/gophergala/videq/handlers/restart"
@@ -112,6 +113,9 @@ func webServer(db *Database, port string) {
 
 	restartHandler := restart.NewHandler(log)
 	http.Handle("/restart/", restartHandler)
+
+	freeHandler := free.NewHandler(log, ROOT_PATH)
+	http.Handle("/free/", freeHandler)
 
 	log.Infof("Server started on port %v", port)
 	log.Info(http.ListenAndServe(":"+port, nil))
