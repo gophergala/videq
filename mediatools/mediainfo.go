@@ -41,6 +41,31 @@ type MediaFileInfo struct {
 	Audio          string
 }
 
+// Commonly supported resolutions and aspect ratios include:
+// 854 x 480 (16:9 480p)
+// 1280 x 720 (16:9 720p)
+// 1920 x 1080 (16:9 1080p)
+// 640 x 480 (4:3 480p)
+// 1280 x 1024 (5:4)
+// 1920 x 1440 (4:3)
+
+var Resolutions = map[string]VideoResolution{
+	"854 x 480 (16:9 480p)":    {Width: 854, Height: 480, AspectRatio: "16:9", AspectRatioInt: 16 / 9, Short: "480p"},
+	"1280 x 720 (16:9 720p)":   {Width: 1280, Height: 720, AspectRatio: "16:9", AspectRatioInt: 16 / 9, Short: "720p"},
+	"1920 x 1080 (16:9 1080p)": {Width: 1920, Height: 1080, AspectRatio: "16:9", AspectRatioInt: 16 / 9, Short: "1080p"},
+	"640 x 480 (4:3 480p)":     {Width: 640, Height: 480, AspectRatio: "4:3", AspectRatioInt: 4 / 3, Short: "480p"},
+	"1280 x 1024 (5:4)":        {Width: 1280, Height: 1024, AspectRatio: "5:4", AspectRatioInt: 4 / 3, Short: ""},
+	"1920 x 1440 (4:3)":        {Width: 1920, Height: 1440, AspectRatio: "4:3", AspectRatioInt: 4 / 3, Short: ""},
+}
+
+type VideoResolution struct {
+	Width          int    `json:"width"`
+	Height         int    `json:"height"`
+	AspectRatio    string `json:"aspectratio"`
+	AspectRatioInt int    `json:"aspectratioint"`
+	Short          string `json:"aspectratio"` // shorthand name for a family of video display resolutions
+}
+
 /*
 FileName: r2w_1080p.mov
 FileSize_bytes: 104937987
