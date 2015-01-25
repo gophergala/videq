@@ -127,11 +127,11 @@ var UploadLogic = {
 					Screen.show('screen-download-bar');
 
 				}
-				else
+
+
+				if(data.Err!==undefined && data.Err!="")
 				{
-
 					clearTimeout( UploadLogic.timer1 );
-
 					Msg.error(data.Err);
 				}
 
