@@ -122,7 +122,7 @@ var UploadLogic = {
 						Screen.show("screen-setup-bar");
 
 						var videoInfo = "Video info: <strong>";
-						if(data.OriginalInfo.Duration!==undefined) videoInfo += " Duration: " + data.OriginalInfo.Duration;
+						if(data.OriginalInfo.Duration_string!==undefined) videoInfo += " Duration: " + data.OriginalInfo.Duration_string;
 						if(data.OriginalInfo.Resolution!==undefined) videoInfo += " | Resolution: " + data.OriginalInfo.Resolution;
 						if(data.OriginalInfo.Framerate!==undefined) videoInfo += " | Framerate: " + data.OriginalInfo.Framerate + " fps";
 						if(data.OriginalInfo.AspectRatio!==undefined) videoInfo += " | AspectRatio: " + data.OriginalInfo.AspectRatio;
@@ -145,23 +145,13 @@ var UploadLogic = {
 			{
 
 				var progress = UploadLogic.flow.progress() * 100;
+				console.log("progress %:", UploadLogic.flow.progress(), progress);
 				if (progress < 100) {
 					$('.progress-bar').css('width', progress + '%');
 				}
 
 			}
 		});
-/*
-		UploadLogic.flow.on('progress', function () {
-			
-			console.log("progress", UploadLogic.flow);
-
-			if (UploadLogic.flow.progress == 0) {
-				return
-			}
-
-
-		});*/
 
 		UploadLogic.flow.on('complete', function(){
 		    $('.progress-bar').css('width', '0%');
@@ -183,7 +173,7 @@ var UploadLogic = {
 		});
 
 
-		$('a.trigger-browse-files').on("click", function(ev){
+		$('.trigger-browse-files').on("click", function(ev){
 			$('input[type=file]').click();
 	    	return false;
 		});

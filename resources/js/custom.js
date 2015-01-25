@@ -14,9 +14,9 @@ var Video = {
 
 
 			var html = '<video autoplay loop poster="/resources/vid/loop.jpg">' +
-/*					   '<source src="/resources/vid/Videq-SW.mp4" type="video/mp4" />' +
-					   '<source src="/resources/vid/Videq-SW.webm" type="video/webm" />' +
-					   '<source src="/resources/vid/Videq-SW.ogv" type="video/ogg" />' +*/
+					   '<source src="/resources/vid/loop.mp4" type="video/mp4" />' +
+					   '<source src="/resources/vid/loop.webm" type="video/webm" />' +
+					   '<source src="/resources/vid/loop.ogv" type="video/ogg" />' +
 					   '</video>';
 
 			vid_cont.prepend(html);
@@ -64,11 +64,11 @@ var Msg = {
 	},
 
 	hide : function () {
-		$(".flashmsg div").fadeOut();
+		$(".flashmsg div").hide();
 	},
 
 	show : function () {
-		$(".flashmsg div").fadeIn();
+		$(".flashmsg div").show();
 	},
 
 	success : function (msg) {
