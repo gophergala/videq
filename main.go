@@ -19,7 +19,7 @@ import (
 	"github.com/gophergala/videq/handlers/static"
 	"github.com/gophergala/videq/handlers/upload"
 	"github.com/gophergala/videq/janitor"
-	"github.com/gophergala/videq/mediatools"
+	//"github.com/gophergala/videq/mediatools"
 )
 
 const ROOT_PATH = "./"
@@ -66,8 +66,8 @@ func main() {
 	// beware, hard testing bewlow
 	// -------------------------------------------------------
 
-	mt := mediatools.NewMediaInfo(log)
-	_ = mt
+	// mt := mediatools.NewMediaInfo(log)
+	// _ = mt
 
 	// testiranje mediainfo toola
 	// minfo, err := mt.GetMediaInfo("_test/master_1080.mp4")
