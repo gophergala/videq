@@ -34,11 +34,48 @@ var Screen = {
 
 	active : false,
 
-	init : function (name) {
+	init : function () {
 
-		var first = name!==undefined ? name : 'screen-drop-zone';
 
-		Screen.show(first);
+		var first = 'screen-drop-zone';
+		var showFirst = true;
+		var checkFreeSpace = false;
+
+
+		var cookie_screen = Screen.getScreentFromCookie();
+		if(cookie_screen!==undefined && cookie_screen!="")
+		{
+
+			if(cookie_screen=="screen-progress-bar")
+			{
+				showFirst = false;
+				Screen.show(cookie_screen);
+			}
+
+			if(cookie_screen=="screen-converting-bar")
+			{
+				showFirst = false;
+				UploadLogic.isDone();
+				Screen.show(cookie_screen);
+			}
+
+			if(cookie_screen=="screen-download-bar")
+			{
+				showFirst = false;
+				Screen.show(cookie_screen);
+			}
+
+		}
+
+
+		if(checkFreeSpace)
+		{
+			$(document).trigger("freespace");
+		} 
+		else
+		{
+			if(showFirst) Screen.show(first);
+		}
 	},
 
 	show : function (name) {
@@ -139,37 +176,12 @@ $(function(){
 
 
 	Video.init();
-
-	var default_screen = Screen.getScreentFromCookie();
-
-	if(default_screen!==undefined && default_screen!="")
-	{
-		if(default_screen=="screen-progress-bar" || default_screen=="screen-converting-bar" || default_screen=="screen-download-bar")
-		{
-			if(default_screen=="screen-converting-bar")
-			{
-				UploadLogic.isDone();
-			}			
-
-			if(default_screen=="screen-download-bar")
-			{
-				UploadLogic.isDone();
-			}
-
-			Screen.init(default_screen);
-		}
-		else
-		{
-			Screen.init();
-		}
-	}
-	else
-	{
-		Screen.init(); // 'screen-download-bar'
-	}
-
-
+	Screen.init();
 	Msg.init();
+
+
+
+
 
 	var notCompletedFiles = getFilesListFromCookie();
 	if (notCompletedFiles != false) {
@@ -210,6 +222,25 @@ $(function(){
 
 		});
 
+
 	});
+
+	$( document ).on( "freespace", {}, function(e) {
+
+		$.ajax({
+			url: "/free/",
+			dataType: "json"
+		}).done(function(data){
+			
+			if(data.Procede!=undefined && data.Procede===false)
+			{
+				Screen.show('screen-error-bar');
+				Msg.error("There was an system error. Please try again later.");
+			}
+
+		});
+
+	});
+
 
 });
