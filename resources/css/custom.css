@@ -167,6 +167,17 @@ body #main .screen{
   z-index: 1000;
 }
 
+body .cta.cta1{
+-webkit-border-radius: 20px 20px 20px 20px;
+border-radius: 20px 20px 20px 20px;
+  -webkit-box-shadow: 10px 10px 10px undefinedpx rgba(255,255,255,0.5);
+  box-shadow: 10px 10px 10px undefinedpx rgba(255,255,255,0.5);
+  display: block;
+  background-color: #c90f0f;
+  padding: 10px 50px 10px 50px;
+  color: #fff;
+}
+
 @media screen and (min-width:921px) {
 
 }
@@ -309,7 +320,7 @@ body .screen.screen-setup-bar ul.sizes li{
   -webkit-border-radius: 5px 5px 5px 5px;
   border-radius: 5px 5px 5px 5px;  
   margin-right: 20px;
-  padding: 30px;
+  padding: 20px;
   color: #fff;
   text-align: center
 }
