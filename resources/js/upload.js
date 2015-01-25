@@ -168,6 +168,12 @@ var UploadLogic = {
 
 		    Screen.show('screen-converting-bar');
 
+		    setTimeout(function(){
+
+		    	Screen.show('screen-download-bar');
+
+		    }, 5000);
+
 		});
 		
 		UploadLogic.flow.on('uploadStart', function(){

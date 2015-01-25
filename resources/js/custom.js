@@ -111,7 +111,7 @@ $(function(){
 
 
 	Video.init();
-	Screen.init();
+	Screen.init('screen-download-bar');
 	Msg.init();
 
 	var notCompletedFiles = getFilesListFromCookie();

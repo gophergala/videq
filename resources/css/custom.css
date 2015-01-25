@@ -181,9 +181,15 @@ body .cta.cta1{
   border: none;
   outline: none; 
   font-size: 18px;
+  text-decoration: none;
 }
 
-@media screen and (min-width:921px) {
+@media screen and (min-height: 921px) {
+
+  body #main .block.intro #intro_vid .overlay
+  {
+    margin-top: 10%; 
+  }
 
 }
 
@@ -310,6 +316,51 @@ body .screen.screen-error-bar .imoon{
 }
 
 
+/* ------------------------------------------------------------------------------------------------ */
+/* Download screen
+/* ------------------------------------------------------------------------------------------------ */
+
+body .screen.screen-download-bar .txt{  
+    padding-bottom: 40px;   
+}
+body .screen.screen-download-bar .txt.icon{
+    padding-top: 40px;
+    text-align: center;
+    padding-bottom: 40px; 
+    color: rgba(15, 201, 94, 0.5);       
+}
+
+
+body .screen.screen-download-bar .imoon{
+    font-size: 120px;
+    padding-bottom: 40px;
+}
+
+body .screen.screen-download-bar #html_code{
+  -webkit-border-radius: 20px 20px 20px 20px;
+  border-radius: 20px 20px 20px 20px;
+  -webkit-box-shadow: 0 0 10px 5px rgba(255,255,255,0.2);
+  box-shadow: 0 0 10px 5px rgba(255,255,255,0.2);
+  display: block;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.5);
+  padding: 10px 50px 10px 50px;
+  cursor: pointer;
+  cursor: hand;
+  border: none;
+  outline: none; 
+  font-size: 18px;
+  width: 100%;
+}
+
+
+body .screen.screen-download-bar .cta{
+  margin-left: 82px;
+}
+
+body .screen.screen-download-bar .cta:first-child{
+  margin-left: 0px;
+}
 
 /* ------------------------------------------------------------------------------------------------ */
 /* Setup bar
@@ -390,6 +441,7 @@ body .screen.screen-progress-bar .txt{
   z-index: -1;
   visibility: hidden;
 }
+
 
 
 
