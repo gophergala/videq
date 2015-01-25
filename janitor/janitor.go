@@ -23,7 +23,7 @@ func Init(db *sql.DB, sc, si string, l alog.Logger) {
 
 	cleanUploadFolderCh = make(chan string, 100)
 	for i := 0; i < 10; i++ {
-		go cleanupIncompleteFolder(cleanUploadFolderCh)
+		go cleanupIncompleteFolderWorker(cleanUploadFolderCh)
 	}
 }
 
@@ -65,7 +65,15 @@ func PossibleToEncode(sid string) (bool, mediatools.MediaFileInfo, map[string]me
 	return ok, minfob, resolutions, nil
 }
 
-func cleanupIncompleteFolder(pathCh <-chan string) {
+func PushToEncode(path string) {
+
+}
+
+func encodeWorker() {
+
+}
+
+func cleanupIncompleteFolderWorker(pathCh <-chan string) {
 	for path := range pathCh {
 		os.RemoveAll(path)
 	}

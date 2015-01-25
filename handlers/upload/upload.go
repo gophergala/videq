@@ -228,10 +228,21 @@ func assembleFile(h *Handler) {
 			return
 		}
 
+		sid := strings.Split(fta.PathToParts, "/")[4]
+
+		targetDirPath := h.rootPath + "/storage/datastore/" + sid
+		err = os.MkdirAll(targetDirPath, 02750)
+		if err != nil {
+			h.log.Error(err)
+			return
+		}
+
 		partFilename := strings.Split(fta.OriginalFilename, ".")
 
+		assabledFilePath := targetDirPath + "/original." + partFilename[len(partFilename)-1]
+
 		// create final file to write to
-		dst, err := os.Create(h.rootPath + "storage/datastore/" + strings.Split(fta.PathToParts, "/")[4] + "/original." + partFilename[len(partFilename)-1])
+		dst, err := os.Create(assabledFilePath)
 		if err != nil {
 			h.log.Error(err)
 			return
@@ -251,5 +262,7 @@ func assembleFile(h *Handler) {
 			}()
 		}
 		os.RemoveAll(fta.PathToParts)
+
+		janitor.PushToEncode(assabledFilePath)
 	}
 }
