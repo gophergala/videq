@@ -55,11 +55,17 @@ header .logo {
   height: 100%;
   display: block;
   background: url(../img/logo.png) no-repeat 0 0;
-  margin-top: 40px;
+  margin-top: 20px;
 }
 
 header h1 {
   display: none;
+}
+
+header p{
+  margin-top: 10px;
+  font-size: 14px;
+  color: #C90E0E;
 }
 
 #main .cta3{
@@ -215,7 +221,7 @@ body .cta.cta3{
   box-shadow: 0 0 10px 5px rgba(255,255,255,0.2);
   display: inline-block;
   background-color: #c90f0f;
-  padding: 5px 10px 2px 10px;
+  padding: 5px 10px 1px 10px;
   color: #fff;
   cursor: pointer;
   cursor: hand;
@@ -529,7 +535,9 @@ body .screen.screen-progress-bar .txt{
     color: #4F523A !important;
 }
 
-
+.flashmsg div.warning p{
+  color: #4F523A !important;
+}
 
 
 /* ------------------------------------------------------------------------------------------------ */

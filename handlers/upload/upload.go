@@ -47,6 +47,12 @@ func NewHandler(log alog.Logger, rootPath string, numOfCompleteFileChBuffer int,
 }
 
 func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	isAllowedToUpload := janitor.IsAllowedToUpload()
+	if isAllowedToUpload == false {
+		http.Error(w, "No upload allowed at this time", http.StatusForbidden)
+		return
+	}
+
 	if r.Method == "POST" {
 		h.streamUpload(w, r)
 	} else if r.Method == "GET" {

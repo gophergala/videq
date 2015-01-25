@@ -180,7 +180,7 @@ var UploadLogic = {
 			}
 
 			if (UploadLogic.progress == 0) {
-				return;
+				//return;
 			}
 
 			if (UploadLogic.firstPart == true && UploadLogic.progress > 0) {
