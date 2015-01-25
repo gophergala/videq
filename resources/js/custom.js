@@ -26,22 +26,37 @@ var Video = {
 
 };
 
+/**
+ * Screeen switcher
+ */
 var Screen = {
 
-	init : function () {
+	active : false,
 
-		Screen.show("screen-drop-zone");
+	init : function (name) {
+
+		var first = name!==undefined ? name : 'screen-drop-zone';
+
+		Screen.show(first);
 	},
 
 	show : function (name) {
 
-		$(".screen").hide();
-		$(".screen." + name ).show();
+		if($(".screen." + name ).length>0)
+		{
+			this.active = name;
+			$(".screen").hide();
+			$(".screen." + name ).show();
+		}
 	
 	}
 
 };
 
+
+/**
+ * Flash messages
+ */
 var Msg = {
 
 	init : function () {
@@ -87,7 +102,7 @@ $(function(){
 
 
 	Video.init();
-	Screen.init();
+	Screen.init('screen-progress-bar');
 	Msg.init();
 
 	var notCompletedFiles = getFilesListFromCookie();

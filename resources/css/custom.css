@@ -251,6 +251,48 @@ body .screen.screen-check-bar #floatingBarsG{
 }
 
 
+
+/* ------------------------------------------------------------------------------------------------ */
+/* Error screen
+/* ------------------------------------------------------------------------------------------------ */
+body .screen.screen-error-bar .txt{  
+    padding-bottom: 40px;   
+}
+body .screen.screen-error-bar .txt.icon{
+    padding-top: 70px;
+    text-align: center;
+    -moz-transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    padding-bottom: 40px;    
+}
+
+
+body .screen.screen-error-bar .imoon{
+    font-size: 180px;
+    padding-bottom: 40px;
+}
+
+
+
+/* ------------------------------------------------------------------------------------------------ */
+/* Progress bar
+/* ------------------------------------------------------------------------------------------------ */
+body .screen.screen-progress-bar .inner{
+    width: 600px !important;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+body .screen.screen-progress-bar .txt{
+    padding-top: 40px; 
+    padding-bottom: 40px; 
+}
+
+
+
 /* ------------------------------------------------------------------------------------------------ */
 /* Uplaod File
 /* ------------------------------------------------------------------------------------------------ */
@@ -316,160 +358,160 @@ body .screen.screen-check-bar #floatingBarsG{
 }
 
 .blockG{
-position:absolute;
-background-color:#FFFFFF;
-width:13px;
-height:31px;
--moz-border-radius:11px 11px 0 0;
--moz-transform:scale(0.4);
--moz-animation-name:fadeG;
--moz-animation-duration:1.6800000000000002s;
--moz-animation-iteration-count:infinite;
--moz-animation-direction:linear;
--webkit-border-radius:11px 11px 0 0;
--webkit-transform:scale(0.4);
--webkit-animation-name:fadeG;
--webkit-animation-duration:1.6800000000000002s;
--webkit-animation-iteration-count:infinite;
--webkit-animation-direction:linear;
--ms-border-radius:11px 11px 0 0;
--ms-transform:scale(0.4);
--ms-animation-name:fadeG;
--ms-animation-duration:1.6800000000000002s;
--ms-animation-iteration-count:infinite;
--ms-animation-direction:linear;
--o-border-radius:11px 11px 0 0;
--o-transform:scale(0.4);
--o-animation-name:fadeG;
--o-animation-duration:1.6800000000000002s;
--o-animation-iteration-count:infinite;
--o-animation-direction:linear;
-border-radius:11px 11px 0 0;
-transform:scale(0.4);
-animation-name:fadeG;
-animation-duration:1.6800000000000002s;
-animation-iteration-count:infinite;
-animation-direction:linear;
+    position:absolute;
+    background-color:#FFFFFF;
+    width:13px;
+    height:31px;
+    -moz-border-radius:11px 11px 0 0;
+    -moz-transform:scale(0.4);
+    -moz-animation-name:fadeG;
+    -moz-animation-duration:1.6800000000000002s;
+    -moz-animation-iteration-count:infinite;
+    -moz-animation-direction:linear;
+    -webkit-border-radius:11px 11px 0 0;
+    -webkit-transform:scale(0.4);
+    -webkit-animation-name:fadeG;
+    -webkit-animation-duration:1.6800000000000002s;
+    -webkit-animation-iteration-count:infinite;
+    -webkit-animation-direction:linear;
+    -ms-border-radius:11px 11px 0 0;
+    -ms-transform:scale(0.4);
+    -ms-animation-name:fadeG;
+    -ms-animation-duration:1.6800000000000002s;
+    -ms-animation-iteration-count:infinite;
+    -ms-animation-direction:linear;
+    -o-border-radius:11px 11px 0 0;
+    -o-transform:scale(0.4);
+    -o-animation-name:fadeG;
+    -o-animation-duration:1.6800000000000002s;
+    -o-animation-iteration-count:infinite;
+    -o-animation-direction:linear;
+    border-radius:11px 11px 0 0;
+    transform:scale(0.4);
+    animation-name:fadeG;
+    animation-duration:1.6800000000000002s;
+    animation-iteration-count:infinite;
+    animation-direction:linear;
 }
 
 #rotateG_01{
-left:0;
-top:36px;
--moz-animation-delay:0.6300000000000001s;
--moz-transform:rotate(-90deg);
--webkit-animation-delay:0.6300000000000001s;
--webkit-transform:rotate(-90deg);
--ms-animation-delay:0.6300000000000001s;
--ms-transform:rotate(-90deg);
--o-animation-delay:0.6300000000000001s;
--o-transform:rotate(-90deg);
-animation-delay:0.6300000000000001s;
-transform:rotate(-90deg);
+    left:0;
+    top:36px;
+    -moz-animation-delay:0.6300000000000001s;
+    -moz-transform:rotate(-90deg);
+    -webkit-animation-delay:0.6300000000000001s;
+    -webkit-transform:rotate(-90deg);
+    -ms-animation-delay:0.6300000000000001s;
+    -ms-transform:rotate(-90deg);
+    -o-animation-delay:0.6300000000000001s;
+    -o-transform:rotate(-90deg);
+    animation-delay:0.6300000000000001s;
+    transform:rotate(-90deg);
 }
 
 #rotateG_02{
-left:10px;
-top:13px;
--moz-animation-delay:0.8400000000000001s;
--moz-transform:rotate(-45deg);
--webkit-animation-delay:0.8400000000000001s;
--webkit-transform:rotate(-45deg);
--ms-animation-delay:0.8400000000000001s;
--ms-transform:rotate(-45deg);
--o-animation-delay:0.8400000000000001s;
--o-transform:rotate(-45deg);
-animation-delay:0.8400000000000001s;
-transform:rotate(-45deg);
+    left:10px;
+    top:13px;
+    -moz-animation-delay:0.8400000000000001s;
+    -moz-transform:rotate(-45deg);
+    -webkit-animation-delay:0.8400000000000001s;
+    -webkit-transform:rotate(-45deg);
+    -ms-animation-delay:0.8400000000000001s;
+    -ms-transform:rotate(-45deg);
+    -o-animation-delay:0.8400000000000001s;
+    -o-transform:rotate(-45deg);
+    animation-delay:0.8400000000000001s;
+    transform:rotate(-45deg);
 }
 
 #rotateG_03{
-left:34px;
-top:4px;
--moz-animation-delay:1.05s;
--moz-transform:rotate(0deg);
--webkit-animation-delay:1.05s;
--webkit-transform:rotate(0deg);
--ms-animation-delay:1.05s;
--ms-transform:rotate(0deg);
--o-animation-delay:1.05s;
--o-transform:rotate(0deg);
-animation-delay:1.05s;
-transform:rotate(0deg);
+    left:34px;
+    top:4px;
+    -moz-animation-delay:1.05s;
+    -moz-transform:rotate(0deg);
+    -webkit-animation-delay:1.05s;
+    -webkit-transform:rotate(0deg);
+    -ms-animation-delay:1.05s;
+    -ms-transform:rotate(0deg);
+    -o-animation-delay:1.05s;
+    -o-transform:rotate(0deg);
+    animation-delay:1.05s;
+    transform:rotate(0deg);
 }
 
 #rotateG_04{
-right:10px;
-top:13px;
--moz-animation-delay:1.2600000000000002s;
--moz-transform:rotate(45deg);
--webkit-animation-delay:1.2600000000000002s;
--webkit-transform:rotate(45deg);
--ms-animation-delay:1.2600000000000002s;
--ms-transform:rotate(45deg);
--o-animation-delay:1.2600000000000002s;
--o-transform:rotate(45deg);
-animation-delay:1.2600000000000002s;
-transform:rotate(45deg);
+    right:10px;
+    top:13px;
+    -moz-animation-delay:1.2600000000000002s;
+    -moz-transform:rotate(45deg);
+    -webkit-animation-delay:1.2600000000000002s;
+    -webkit-transform:rotate(45deg);
+    -ms-animation-delay:1.2600000000000002s;
+    -ms-transform:rotate(45deg);
+    -o-animation-delay:1.2600000000000002s;
+    -o-transform:rotate(45deg);
+    animation-delay:1.2600000000000002s;
+    transform:rotate(45deg);
 }
 
 #rotateG_05{
-right:0;
-top:36px;
--moz-animation-delay:1.4700000000000002s;
--moz-transform:rotate(90deg);
--webkit-animation-delay:1.4700000000000002s;
--webkit-transform:rotate(90deg);
--ms-animation-delay:1.4700000000000002s;
--ms-transform:rotate(90deg);
--o-animation-delay:1.4700000000000002s;
--o-transform:rotate(90deg);
-animation-delay:1.4700000000000002s;
-transform:rotate(90deg);
+    right:0;
+    top:36px;
+    -moz-animation-delay:1.4700000000000002s;
+    -moz-transform:rotate(90deg);
+    -webkit-animation-delay:1.4700000000000002s;
+    -webkit-transform:rotate(90deg);
+    -ms-animation-delay:1.4700000000000002s;
+    -ms-transform:rotate(90deg);
+    -o-animation-delay:1.4700000000000002s;
+    -o-transform:rotate(90deg);
+    animation-delay:1.4700000000000002s;
+    transform:rotate(90deg);
 }
 
 #rotateG_06{
-right:10px;
-bottom:9px;
--moz-animation-delay:1.6800000000000002s;
--moz-transform:rotate(135deg);
--webkit-animation-delay:1.6800000000000002s;
--webkit-transform:rotate(135deg);
--ms-animation-delay:1.6800000000000002s;
--ms-transform:rotate(135deg);
--o-animation-delay:1.6800000000000002s;
--o-transform:rotate(135deg);
-animation-delay:1.6800000000000002s;
-transform:rotate(135deg);
+    right:10px;
+    bottom:9px;
+    -moz-animation-delay:1.6800000000000002s;
+    -moz-transform:rotate(135deg);
+    -webkit-animation-delay:1.6800000000000002s;
+    -webkit-transform:rotate(135deg);
+    -ms-animation-delay:1.6800000000000002s;
+    -ms-transform:rotate(135deg);
+    -o-animation-delay:1.6800000000000002s;
+    -o-transform:rotate(135deg);
+    animation-delay:1.6800000000000002s;
+    transform:rotate(135deg);
 }
 
 #rotateG_07{
-bottom:0;
-left:34px;
--moz-animation-delay:1.8900000000000001s;
--moz-transform:rotate(180deg);
--webkit-animation-delay:1.8900000000000001s;
--webkit-transform:rotate(180deg);
--ms-animation-delay:1.8900000000000001s;
--ms-transform:rotate(180deg);
--o-animation-delay:1.8900000000000001s;
--o-transform:rotate(180deg);
-animation-delay:1.8900000000000001s;
-transform:rotate(180deg);
+    bottom:0;
+    left:34px;
+    -moz-animation-delay:1.8900000000000001s;
+    -moz-transform:rotate(180deg);
+    -webkit-animation-delay:1.8900000000000001s;
+    -webkit-transform:rotate(180deg);
+    -ms-animation-delay:1.8900000000000001s;
+    -ms-transform:rotate(180deg);
+    -o-animation-delay:1.8900000000000001s;
+    -o-transform:rotate(180deg);
+    animation-delay:1.8900000000000001s;
+    transform:rotate(180deg);
 }
 
 #rotateG_08{
-left:10px;
-bottom:9px;
--moz-animation-delay:2.1s;
--moz-transform:rotate(-135deg);
--webkit-animation-delay:2.1s;
--webkit-transform:rotate(-135deg);
--ms-animation-delay:2.1s;
--ms-transform:rotate(-135deg);
--o-animation-delay:2.1s;
--o-transform:rotate(-135deg);
-animation-delay:2.1s;
-transform:rotate(-135deg);
+    left:10px;
+    bottom:9px;
+    -moz-animation-delay:2.1s;
+    -moz-transform:rotate(-135deg);
+    -webkit-animation-delay:2.1s;
+    -webkit-transform:rotate(-135deg);
+    -ms-animation-delay:2.1s;
+    -ms-transform:rotate(-135deg);
+    -o-animation-delay:2.1s;
+    -o-transform:rotate(-135deg);
+    animation-delay:2.1s;
+    transform:rotate(-135deg);
 }
 
 @-moz-keyframes fadeG{
