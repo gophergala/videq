@@ -168,14 +168,19 @@ body #main .screen{
 }
 
 body .cta.cta1{
--webkit-border-radius: 20px 20px 20px 20px;
-border-radius: 20px 20px 20px 20px;
-  -webkit-box-shadow: 10px 10px 10px undefinedpx rgba(255,255,255,0.5);
-  box-shadow: 10px 10px 10px undefinedpx rgba(255,255,255,0.5);
-  display: block;
+  -webkit-border-radius: 20px 20px 20px 20px;
+  border-radius: 20px 20px 20px 20px;
+  -webkit-box-shadow: 0 0 10px 5px rgba(255,255,255,0.2);
+  box-shadow: 0 0 10px 5px rgba(255,255,255,0.2);
+  display: inline-block;
   background-color: #c90f0f;
   padding: 10px 50px 10px 50px;
   color: #fff;
+  cursor: pointer;
+  cursor: hand;
+  border: none;
+  outline: none; 
+  font-size: 18px;
 }
 
 @media screen and (min-width:921px) {
@@ -267,6 +272,19 @@ body .screen.screen-check-bar #floatingBarsG{
 }
 
 
+/* ------------------------------------------------------------------------------------------------ */
+/* Converting Screen
+/* ------------------------------------------------------------------------------------------------ */
+body .screen.screen-converting-bar .txt{
+    padding-top: 70px;
+    text-align: center
+}
+
+body .screen.screen-converting-bar #floatingBarsG{
+    margin-bottom: 40px;
+}
+
+
 
 /* ------------------------------------------------------------------------------------------------ */
 /* Error screen
@@ -340,7 +358,9 @@ body .screen.screen-setup-bar .bootstrap-switch-handle-on{
   background-color: #0fc95e;
 }
 
-
+body .screen.screen-setup-bar .actions{
+  text-align: center;
+}
 
 
 /* ------------------------------------------------------------------------------------------------ */
@@ -409,6 +429,10 @@ body .screen.screen-progress-bar .txt{
 
 .flashmsg div.info{
 
+}
+
+.flashmsg div.warning{
+    background-color: #ffb600;
 }
 
 

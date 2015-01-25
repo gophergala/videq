@@ -93,6 +93,14 @@ var Msg = {
 		$(".flashmsg div").attr("class", "").addClass("info");
 		$(".flashmsg div p").html(msg);
 		this.show();
+	},
+
+	warning : function (msg) {
+		this.hide();
+		$(".flashmsg .imoon").addClass("icon-warning");
+		$(".flashmsg div").attr("class", "").addClass("warning");
+		$(".flashmsg div p").html(msg);
+		this.show();
 	}
 
 };
@@ -103,15 +111,21 @@ $(function(){
 
 
 	Video.init();
-	Screen.init('screen-setup-bar');
+	Screen.init();
 	Msg.init();
 
 	var notCompletedFiles = getFilesListFromCookie();
 	if (notCompletedFiles != false) {
+
+		var fileString = "";
+
 		$.each(notCompletedFiles, function(ix, fileName){
-			$('#list-of-not-uploded-files').append('<li>' + fileName + '</li>');
+
+			fileString += fileName;
 		});
-		$('#list-of-not-uploded-files-holder').show();
+		
+
+		Msg.warning("Drag and drop following files and click upload to resume them: " + fileString);
 	}
 	
 	$("#drop-zone").hover(function(){
