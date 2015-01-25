@@ -20,9 +20,14 @@
 
     <div class="logo" title="Videq"><h1>Videq</h1></div>
     
+    
+
 </header>
 
 <div id="main" role="main">
+
+    <button class="trigger_new_session cta cta3" title="Start with new video"><i class="imoon icon-circle-cross" aria-hidden="true"></i></button>
+
 
   <div class="block intro">
     
@@ -31,7 +36,8 @@
         <!-- video -->
 
         <div class="overlay">
-        
+            
+
 
             <div class="flashmsg">
                 <div class="error">
@@ -132,7 +138,7 @@
                                         </li>
                                         <li>
                                             <label>
-                                            <div><img src="/resources/img/size_small.png" ></div>
+                                            <div><img src="/resources/img/size_large.png" ></div>
                                             <div>1080p (1920x1080)</div>
                                             <div><input type="radio" name="output_size" value="3" checked ></div>
                                             </label>
@@ -258,9 +264,19 @@
 
                         <div class="row">
                             
-                            <div class="col-md-3 col-md-offset-1"><a href="" class="trigger_upload_video cta cta1">Download .MP4 video</a></div>
-                            <div class="col-md-4"><a href="" class="trigger_upload_video cta cta1">Download .WEBM video</a></div>
-                            <div class="col-md-3"><a href="" class="trigger_upload_video cta cta1">Download .OGV video</a></div>
+                            <div class="col-md-3"><a href="" id="mp4_link" class="cta cta1">Download .MP4</a></div>
+                            <div class="col-md-3"><a href="" id="webm_link" class="cta cta1">Download .WEBM</a></div>
+                            <div class="col-md-3"><a href="" id="ogv_link" class="cta cta1">Download .OGV</a></div>
+                            <div class="col-md-3"><a href="" id="jpg_link" class="cta cta1">Download .JPG</a></div>
+
+                        </div>                            
+
+                        <br><br><br>
+
+                        <div class="row">
+                            
+                            <div class="col-md-10 col-md-offset-1" style="text-align: center"> <button class="trigger_new_session cta cta2"><i class="imoon icon-circle-cross" aria-hidden="true"></i> Start with new video</button></div>
+
 
                         </div>    
 
@@ -278,14 +294,6 @@
 
 
             <div class="container">
-
-
-                <!-- Upload Finished -->
-                <div class="js-upload-finished" style="display: none;">
-                <div id="fileLog" class="list-group">
-                </div>
-                </div>
-
 
 
                 <div id="list-of-stored-files-holder" class="panel panel-success" style="display: none;">

@@ -1,4 +1,5 @@
 
+
 /**
  * Video Background
  */
@@ -45,11 +46,38 @@ var Screen = {
 		if($(".screen." + name ).length>0)
 		{
 			this.active = name;
+
+			Screen.addScreenCookie(this.active);
+
 			$(".screen").hide();
 			$(".screen." + name ).show();
 		}
 	
+	},
+
+
+	addScreenCookie : function (screenName) {
+		
+		Screen.removeScreenCookie()
+
+		$.cookie('screen', screenName, { expires: 7, path: '/' });
+	},
+
+
+	removeScreenCookie : function () {
+		$.cookie('screen', '', { expires: 7, path: '/' });
+	},
+
+	getScreentFromCookie : function () {
+		var cookieStorage = $.cookie('screen');
+
+		if (cookieStorage == undefined || cookieStorage == ""){
+			return false;
+		}
+
+		return cookieStorage;
 	}
+
 
 };
 
@@ -111,7 +139,31 @@ $(function(){
 
 
 	Video.init();
-	Screen.init(); // 'screen-download-bar'
+
+	var default_screen = Screen.getScreentFromCookie();
+
+	if(default_screen!==undefined && default_screen!="")
+	{
+		if(default_screen=="screen-progress-bar" || default_screen=="screen-converting-bar" || default_screen=="screen-download-bar")
+		{
+			if(default_screen=="screen-converting-bar")
+			{
+				UploadLogic.isDone();
+			}
+
+			Screen.init(default_screen);
+		}
+		else
+		{
+			Screen.init();
+		}
+	}
+	else
+	{
+		Screen.init(); // 'screen-download-bar'
+	}
+
+
 	Msg.init();
 
 	var notCompletedFiles = getFilesListFromCookie();
@@ -136,5 +188,14 @@ $(function(){
 
 
 	$(".bswitch").bootstrapSwitch();
+
+	$(".trigger_new_session").on("click", function(e){
+
+		e.preventDefault();
+		Screen.removeScreenCookie();
+
+		location.href = '';
+
+	});
 
 });

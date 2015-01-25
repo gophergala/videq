@@ -67,8 +67,75 @@ var UploadLogic = {
 	},
 
 
-	submitSetup : function () {
+	isDone : function () {
 
+		Screen.show('screen-download-bar');
+
+		return;
+
+	    UploadLogic.timer1 = setInterval(function(){
+
+
+			$.ajax({
+				url: "/done/",
+				dataType: "json",
+			}).done(function(data){
+				
+				if(data.Procede)
+				{
+					clearTimeout( UploadLogic.timer1 );
+
+					
+
+					var html_code_str = '';
+
+
+					if(data.first_frame_jpg!==undefined)
+					{
+						html_code_str += '<video autoplay loop poster="'+ data.first_frame_jpg +'">';
+					}
+					else
+					{
+						html_code_str += '<video autoplay loop>';
+					}
+
+					if(data.mp4_link!==undefined)
+					{
+						$("#mp4_link").attr("href", data.mp4_link);
+
+						html_code_str += '<source src="'+ data.mp4_link +'" type="video/mp4" />';
+					}
+
+					if(data.webm_link!==undefined)
+					{
+						$("#webm_link").attr("href", data.webm_link);
+
+						html_code_str += '<source src="'+ data.webm_link +'" type="video/mp4" />';
+					}
+
+					if(data.ogv_link!==undefined)
+					{
+						$("#ogv_link").attr("href", data.ogv_link);
+
+						html_code_str += '<source src="'+ data.ogv_link +'" type="video/mp4" />';
+					}
+
+					html_code_str += '</video>';
+
+					$("#html_code").html(html_code_str);
+
+					Screen.show('screen-download-bar');
+
+				}
+				else
+				{
+					Msg.error(data.Err);
+				}
+
+			});
+
+
+	    }, 1000);
 
 
 	},
@@ -103,7 +170,6 @@ var UploadLogic = {
 
 		UploadLogic.flow.on('fileProgress', function () {
 
-			console.log("fileProgress", UploadLogic.flow.progress());
 
 			if (UploadLogic.flow.progress() > 0) {
 				UploadLogic.progress = UploadLogic.flow.progress();
@@ -126,13 +192,9 @@ var UploadLogic = {
 					dataType: "json"
 				}).done(function(data) {
 					
-					console.log(data);
 
 					if(data.Procede===true)
 					{
-						console.log("Procede yes");
-
-
 						Screen.show("screen-setup-bar");
 
 						var videoInfo = "Video info: <strong>";
@@ -147,7 +209,6 @@ var UploadLogic = {
 					}
 					else
 					{
-						console.log("Procede no");
 
 						Screen.show("screen-error-bar");
 						Msg.error(data.Err);
@@ -174,17 +235,12 @@ var UploadLogic = {
 
 		UploadLogic.flow.on('complete', function(){
 
-		    $('#fileLog').append('<a href="#" class="list-group-item list-group-item-success"><span class="badge alert-success pull-right">Success</span>All upload completed</a>');
+			Screen.show('screen-converting-bar');
 
-		    Screen.show('screen-converting-bar');
-
-		    setTimeout(function(){
-
-		    	Screen.show('screen-download-bar');
-
-		    }, 2000);
+		    UploadLogic.isDone();
 
 		});
+
 		
 		UploadLogic.flow.on('uploadStart', function(){
 			
