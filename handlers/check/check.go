@@ -7,6 +7,7 @@ import (
 	alog "github.com/cenkalti/log"
 	"github.com/gophergala/videq/handlers/session"
 	"github.com/gophergala/videq/janitor"
+	"github.com/gophergala/videq/mediatools"
 )
 
 type VideoDimension struct {
@@ -15,8 +16,10 @@ type VideoDimension struct {
 }
 
 type VideoInfo struct {
+	Procede          bool
 	Err              string
 	OutputDimensions []VideoDimension
+	OriginalInfo     mediatools.MediaFileInfo
 }
 
 type Handler struct {
@@ -52,7 +55,24 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//ok, mediaInfo := janitor.PossibleToEncode(sid)
+	ok, mediaInfo, err := janitor.PossibleToEncode(sid)
+	if err != nil {
+		returnValue := VideoInfo{
+			Procede:          ok,
+			Err:              err.Error(),
+			OutputDimensions: make([]VideoDimension, 0),
+			OriginalInfo:     mediaInfo}
+		js, err := json.Marshal(returnValue)
+		if err != nil {
+			h.log.Error(err)
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(js)
+		return
+	}
 
 	outputDm := make([]VideoDimension, 0)
 	outputDm = append(outputDm, VideoDimension{"100", "200"})
@@ -61,8 +81,10 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	outputDm = append(outputDm, VideoDimension{"400", "800"})
 
 	returnValue := VideoInfo{
+		Procede:          ok,
 		Err:              "",
-		OutputDimensions: outputDm}
+		OutputDimensions: outputDm,
+		OriginalInfo:     mediaInfo}
 
 	js, err := json.Marshal(returnValue)
 	if err != nil {
