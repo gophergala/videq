@@ -68,19 +68,19 @@ func (h *Handler) checkPart(w http.ResponseWriter, r *http.Request) {
 
 	stat, err := os.Stat(chunkDirPath)
 	if err != nil {
-		h.log.Info(err)
+		h.log.Debug(err)
 		http.Error(w, "Internal server error", http.StatusNoContent)
 		return
 	}
 
 	expectedChunkSize, err := strconv.Atoi(r.URL.Query().Get("flowCurrentChunkSize"))
 	if err != nil {
-		h.log.Info(err)
+		h.log.Debug(err)
 		http.Error(w, "Internal server error", http.StatusBadRequest)
 		return
 	}
 	if int(stat.Size()) != expectedChunkSize {
-		h.log.Info(err)
+		h.log.Debug(err)
 		http.Error(w, "Chunk size check failed", http.StatusPartialContent)
 		return
 	}
