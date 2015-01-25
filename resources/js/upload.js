@@ -150,23 +150,24 @@ var UploadLogic = {
 
 				UploadLogic.progress = UploadLogic.flow.progress() * 100;
 	
-				UploadLogic.timer1 = setInterval(function(){
-
-					if ( UploadLogic.progress < 100) 
-					{
-						console.log("progress", Math.round(UploadLogic.progress));
-						$('.progress-bar').css('width', Math.round(UploadLogic.progress) + '%');
-					}
-
-				},500);
+				if ( UploadLogic.progress > 0 && UploadLogic.progress < 100 ) 
+				{
+					$('.progress-bar').css('width', Math.round(UploadLogic.progress) + '%');
+				}
+				else
+				{
+					$('.progress-bar').css('width', '100%');
+				}
 
 			}
 		});
 
 		UploadLogic.flow.on('complete', function(){
-		    $('.progress-bar').css('width', '0%');
+
 		    $('#fileLog').append('<a href="#" class="list-group-item list-group-item-success"><span class="badge alert-success pull-right">Success</span>All upload completed</a>');
-		    $('#upload_form').show();
+
+		    Screen.show('screen-converting-bar');
+
 		});
 		
 		UploadLogic.flow.on('uploadStart', function(){
@@ -219,15 +220,50 @@ var UploadLogic = {
 				
 			},1);
 
+			var form_data = $(this).serialize();
+			
+			var send_data = {
+				output_width: 0,
+				output_height: 0,
+				output_leave_audio: 0,
+				output_generate_html: 0
+			};
 
-		
+
+
+			if(form_data.output_size==1)
+			{
+				send_data.output_width = 854;
+				send_data.output_height = 480;
+			}
+			else if(form_data.output_size==2)
+			{
+				send_data.output_width = 1280;
+				send_data.output_height = 720;
+			}
+			else if(form_data.output_size==3)
+			{
+				send_data.output_width = 1920;
+				send_data.output_height = 1080;
+			}
+			
+			if(form_data.leave_audio!==undefined && form_data.leave_audio==1)
+			{
+				send_data.output_leave_audio = 1;
+			}
+			
+			if(form_data.generate_html!==undefined && form_data.generate_html==1)
+			{
+				send_data.output_generate_html = 1;
+			}
+
+
 			$.ajax({
 				url: "/encode/",
 				dataType: "json",
-				data: $(this).serialize(),
-			}).done(function(data) {
+				data: send_data,
+			}).done(function(data){
 				
-				console.log(data);
 
 			});
 
