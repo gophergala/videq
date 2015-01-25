@@ -13,6 +13,7 @@ import (
 	"github.com/gophergala/videq/handlers/download"
 	"github.com/gophergala/videq/handlers/gzip"
 	"github.com/gophergala/videq/handlers/home"
+	"github.com/gophergala/videq/handlers/restart"
 	"github.com/gophergala/videq/handlers/session"
 	"github.com/gophergala/videq/handlers/static"
 	"github.com/gophergala/videq/handlers/upload"
@@ -108,6 +109,9 @@ func webServer(db *Database, port string) {
 
 	downloadHandler := download.NewHandler(log, ROOT_PATH)
 	http.Handle("/download/", downloadHandler)
+
+	restartHandler := restart.NewHandler(log)
+	http.Handle("/restart/", restartHandler)
 
 	log.Infof("Server started on port %v", port)
 	log.Info(http.ListenAndServe(":"+port, nil))

@@ -34,9 +34,22 @@ func Init(db *sql.DB, sc, si string, l alog.Logger) {
 	}
 }
 
+func CleanupUser(sid string) error {
+	os.RemoveAll(StorageComplete + sid)
+	os.RemoveAll(StorageIncomplete + sid)
+
+	_, err := DbConn.Exec("DELETE FROM file WHERE sid=?", sid)
+	if err != nil {
+		log.Error(err)
+		return err
+	}
+
+	return nil
+}
+
 // check if current user is uploading a file?
 func HasFileInUpload(sid string) (bool, error) {
-	firstPartFilename := StorageIncomplete + "/" + sid + "/1"
+	firstPartFilename := StorageIncomplete + sid + "/1"
 
 	_, err := os.Stat(firstPartFilename)
 	if os.IsNotExist(err) {
