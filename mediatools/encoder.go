@@ -26,7 +26,7 @@ func (m *MediaInfo) EncodeVideoFile(fileLoc string, fileName string) (err error)
 
 //
 // HandBrakeCLI -i _test/master_1080.mp4 -o _test/out/master_1080_2.mp4 -e x264 -q 22 -r 15 -B 64 -X 480 -O -x level=4.0:ref=9:bframes=16:b-adapt=2:direct=auto:analyse=all:8x8dct=0:me=tesa:merange=24:subme=11:trellis=2:fast-pskip=0:vbv-bufsize=25000:vbv-maxrate=20000:rc-lookahead=60
-//
+// http://thanhsiang.org/faqing/node/196
 /*
 alternativno UMEJESTO handbrakea
 These are the options i used to convert to a H.264/AAC .mp4 format for html5 playback (i think it may help out for other guys with this this problem in some way):
@@ -38,10 +38,15 @@ func (m *MediaInfo) encodeMP4(fileLoc string, fileName string) (fileNameOut stri
 	fileNameOut = "encoded.mp4"
 	fileDestination := fileLoc + fileNameOut
 
-	maxWidth := "480"
+	maxWidth := "1280"
 	extraParams := `level=4.0:ref=9:bframes=16:b-adapt=2:direct=auto:analyse=all:8x8dct=0:me=tesa:merange=24:subme=11:trellis=2:fast-pskip=0:vbv-bufsize=25000:vbv-maxrate=20000:rc-lookahead=60`
 
-	out, err := sh.Command("HandBrakeCLI", "-i", fileSource, "-o", fileDestination, "-e", "x264", "-q", "22", "-r", "15", "-B", "64", "-X", maxWidth, "-O", "-x", extraParams).Output()
+	// test fast preset
+	//	out, err := sh.Command("HandBrakeCLI", "-i", fileSource, "-o", fileDestination, "-e", "x264", "-q", "22", "-r", "15", "-B", "64", "-X", maxWidth, "-O", "-x", extraParams).Output()
+
+	// alen's web master preset
+	out, err := sh.Command("HandBrakeCLI", "-i", fileSource, "-o", fileDestination,
+		"-e", "x264", "-b", "500", "-B", "64", "-X", maxWidth, "--keep-display-aspect", "--two-pass", "-O", "-x", extraParams).Output()
 	if err == sh.ErrExecTimeout {
 		m.log.Errorf("shell exec timeouteded.", err)
 	}

@@ -3,6 +3,15 @@
 # videq
 High quality video encoding for modern web in golang
 
+**Project links and final notes**
+   * compo submission page http://gopher-gala.challengepost.com/submissions/31979-videq
+   * repo https://github.com/gophergala/videq/
+   * demo http://videq.nivas.hr
+     - limitations
+       - demo is limited to max 5 min videos and 50 gb of user uploaded data
+       - each user can upload only 1 video, after it is encoded or aborted, user can upload new one
+       - every hour clenaup will delete old videos
+
 ## Inspiration
 
 We work in digital agency and we build a lot of websites that use videos (full screen, background, interviews, product showcase etc.). 
@@ -71,9 +80,9 @@ mysql -u root -p videq < sql/empty_db.sql
    * ffmpeg2theora http://v2v.cc/~j/ffmpeg2theora/
 
 ## Challenges we ran into
-Big file upload
-Agile golang development
-Development of go app on Windows which uses Unix only server side stuff.
+- Big file upload
+- Agile golang development
+- Development of go app on Windows which uses Unix only server side stuff.
 
 ## Accomplishments that we are proud of
 We managed to get MVP in just two days. :) 
@@ -88,6 +97,10 @@ We are new in golang and  we used this hackaton to learn more about:
 - more encoding options for quality
 - graceful restart
 - scalable (multi server workers) … if we manage in that short time we have… 
+- move all configurable params to config
+- cleanup
+- send email when encoding is done
+- ...
 
 ## The Team
 Big shout to fine http://nivas.hr Videq team members:
