@@ -50,20 +50,19 @@ func RecordFilename(sid, filename string) error {
 	return nil
 }
 
-func PossibleToEncode(sid string) (bool, mediatools.MediaFileInfo, error) {
+func PossibleToEncode(sid string) (bool, mediatools.MediaFileInfo, map[string]mediatools.VideoResolution, error) {
 	mt := mediatools.NewMediaInfo(log)
 
 	userFolder := StorageIncomplete + sid
 
 	ok, minfob, resolutions, err := mt.CheckMedia(userFolder + "/1")
-	_ = resolutions
 	if err != nil {
 		log.Error(err)
 		cleanUploadFolderCh <- userFolder
-		return false, minfob, err
+		return false, minfob, resolutions, err
 	}
 
-	return ok, minfob, nil
+	return ok, minfob, resolutions, nil
 }
 
 func clenupIncompleteFolder(pathCh <-chan string) {

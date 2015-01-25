@@ -10,15 +10,10 @@ import (
 	"github.com/gophergala/videq/mediatools"
 )
 
-type VideoDimension struct {
-	Height string
-	Width  string
-}
-
 type VideoInfo struct {
 	Procede          bool
 	Err              string
-	OutputDimensions []VideoDimension
+	OutputDimensions map[string]mediatools.VideoResolution
 	OriginalInfo     mediatools.MediaFileInfo
 }
 
@@ -55,35 +50,15 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ok, mediaInfo, err := janitor.PossibleToEncode(sid)
+	ok, mediaInfo, res, err := janitor.PossibleToEncode(sid)
+	errorString := ""
 	if err != nil {
-		returnValue := VideoInfo{
-			Procede:          ok,
-			Err:              err.Error(),
-			OutputDimensions: make([]VideoDimension, 0),
-			OriginalInfo:     mediaInfo}
-		js, err := json.Marshal(returnValue)
-		if err != nil {
-			h.log.Error(err)
-			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-			return
-		}
-
-		w.Header().Set("Content-Type", "application/json")
-		w.Write(js)
-		return
+		errorString = err.Error()
 	}
-
-	outputDm := make([]VideoDimension, 0)
-	outputDm = append(outputDm, VideoDimension{"100", "200"})
-	outputDm = append(outputDm, VideoDimension{"200", "400"})
-	outputDm = append(outputDm, VideoDimension{"300", "600"})
-	outputDm = append(outputDm, VideoDimension{"400", "800"})
-
 	returnValue := VideoInfo{
 		Procede:          ok,
-		Err:              "",
-		OutputDimensions: outputDm,
+		Err:              errorString,
+		OutputDimensions: res,
 		OriginalInfo:     mediaInfo}
 
 	js, err := json.Marshal(returnValue)
