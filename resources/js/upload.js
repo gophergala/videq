@@ -78,7 +78,7 @@ var UploadLogic = {
 				dataType: "json",
 			}).done(function(data){
 				
-				if(data.Procede)
+				if(data.Procede===true)
 				{
 					clearTimeout( UploadLogic.timer1 );
 

@@ -201,13 +201,13 @@ $(function(){
 
 		location.href = '';
 
-/*		$.ajax({
+		$.ajax({
 			url: "/restart/",
 			dataType: "json"
 		}).done(function(data){
 			
 
-		});*/
+		});
 
 	});
 
