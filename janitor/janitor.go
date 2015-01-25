@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"os"
 
+	alog "github.com/cenkalti/log"
 	"github.com/gophergala/videq/mediatools"
 )
 

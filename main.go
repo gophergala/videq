@@ -21,7 +21,6 @@ import (
 const ROOT_PATH = "./"
 const NUM_OF_MERGE_WORKERS = 10
 const NUM_OF_MERGE_BUFFER = 100
-const DSN = "root:m11@/videq"
 
 var db *Database
 
@@ -46,7 +45,7 @@ func main() {
 	}
 	defer db.CloseDB()
 
-	janitor.Init(db.conn, ROOT_PATH+"storage/datastore/", ROOT_PATH+"storage/.upload/")
+	janitor.Init(db.conn, ROOT_PATH+"storage/datastore/", ROOT_PATH+"storage/.upload/", log)
 
 	webPort := flag.String("web", "", "Start web server on given port")
 	flag.Parse()
@@ -82,7 +81,7 @@ func webServer(db *Database, port string) {
 	http.Handle("/resources/", gzipStaticHandler)
 
 	homeHandler := home.NewHandler(ROOT_PATH)
-	homeSidHandler := session.NewHandler(log, db.conn, homeHandler, DSN)
+	homeSidHandler := session.NewHandler(log, db.conn, homeHandler)
 	http.Handle("/", homeSidHandler)
 
 	uploadHandler := upload.NewHandler(log, ROOT_PATH, NUM_OF_MERGE_BUFFER, NUM_OF_MERGE_WORKERS)
