@@ -69,9 +69,6 @@ var UploadLogic = {
 
 	isDone : function () {
 
-		Screen.show('screen-download-bar');
-
-		return;
 
 	    UploadLogic.timer1 = setInterval(function(){
 
@@ -129,6 +126,9 @@ var UploadLogic = {
 				}
 				else
 				{
+
+					clearTimeout( UploadLogic.timer1 );
+					
 					Msg.error(data.Err);
 				}
 
