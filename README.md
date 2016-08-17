@@ -9,13 +9,13 @@ High quality video encoding for modern web in golang
    * demo http://videq.nivas.hr:8080/
      - limitations
        - demo is limited to max 5 min videos and 50 gb of user uploaded data
-       - each user can upload only 1 video, after it is encoded or aborted, user can upload new one
-       - every hour clenaup will delete old videos
+       - each user can upload only 1 video, after it is encoded or aborted, user can upload a new one
+       - every hour cleanup will delete old videos
 
 ## Inspiration
 
-We work in digital agency and we build a lot of websites that use videos (full screen, background, interviews, product showcase etc.). 
-Developing compatible cross platform/browser website is a technical nightmare due to thrilling mix of “historical” and "future"  standards. In relation to video playback - that means if we want a video on website to be playable on most platforms we need ad least 3 different video formats:
+We work in a digital agency and we build a lot of websites that use videos (full screen, background, interviews, product showcases, etc.). 
+Developing compatible cross platform/browser websites is a technical nightmare due to a  thrilling mix of “historical” and "future"  standards. In relation to video playback - that means if we want a video on website to be playable on most platforms we need ad least 3 different video formats:
 - H.264+AAC+MP4 - Safari, Chrome, Firefox (new versions), IE
 - Theora+Vorbis+Ogg – Firefox
 - WebM - Chrome, IE
